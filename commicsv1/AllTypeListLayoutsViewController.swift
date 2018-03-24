@@ -34,6 +34,8 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CellCollectionViewCell
         cell.label.text = namesView[indexPath.row]
         return cell
+        
+        // добавить кнопку на каждый тип лэйаута
     }
    
     @IBAction func addNewPage(_ sender: UIButton) {
