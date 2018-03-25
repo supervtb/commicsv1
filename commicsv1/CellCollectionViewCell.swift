@@ -12,4 +12,5 @@ class CellCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var label: UILabel!
     
+    @IBOutlet weak var bttnLayout: UIButton!
 }

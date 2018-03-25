@@ -9,8 +9,14 @@
 import Foundation
 class TypeOfLayouts {
     var nameLayout = ""
+    var nameIconLayout = ""
     
     init(nameLayout: String) {
         self.nameLayout = nameLayout
+    }
+    
+    init(nameLayout: String, nameIconLayout: String) {
+        self.nameLayout = nameLayout
+        self.nameIconLayout = nameIconLayout
     }
 }

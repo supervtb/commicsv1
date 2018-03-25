@@ -90,7 +90,7 @@ UIPageViewControllerDataSource, SecondVCDelegate {
     
     func removeCurrentPage(){
         print(index)
-         pages.remove(at: index)
+        pages.remove(at: index)
         setViewControllers([pages[index-1]], direction: .forward, animated: true, completion: nil)
         index = index-1
        
