@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		13276B662064388D0092131C /* LayoutFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13276B652064388D0092131C /* LayoutFirstViewController.swift */; };
+		1377D3F12067F39E0079A7FF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1377D3F02067F39E0079A7FF /* AudioToolbox.framework */; };
 		137BBA02206692DE0085F770 /* TypeOfLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA01206692DE0085F770 /* TypeOfLayouts.swift */; };
 		137BBA0A2066D02D0085F770 /* AllTypeListLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA092066D02D0085F770 /* AllTypeListLayoutsViewController.swift */; };
 		137BBA0C2066D58E0085F770 /* CellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA0B2066D58E0085F770 /* CellCollectionViewCell.swift */; };
@@ -23,6 +24,8 @@
 
 /* Begin PBXFileReference section */
 		13276B652064388D0092131C /* LayoutFirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutFirstViewController.swift; sourceTree = "<group>"; };
+		1377D3F02067F39E0079A7FF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		1377D3F22067F39E0079A7FF /* commicsv1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = commicsv1.entitlements; sourceTree = "<group>"; };
 		137BBA01206692DE0085F770 /* TypeOfLayouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeOfLayouts.swift; sourceTree = "<group>"; };
 		137BBA092066D02D0085F770 /* AllTypeListLayoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTypeListLayoutsViewController.swift; sourceTree = "<group>"; };
 		137BBA0B2066D58E0085F770 /* CellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -43,12 +46,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1377D3F12067F39E0079A7FF /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1377D3EF2067F39E0079A7FF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1377D3F02067F39E0079A7FF /* AudioToolbox.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		137BBA00206692AD0085F770 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -62,6 +74,7 @@
 			children = (
 				13B283862063F67B007BFC10 /* commicsv1 */,
 				13B283852063F67B007BFC10 /* Products */,
+				1377D3EF2067F39E0079A7FF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,6 +89,7 @@
 		13B283862063F67B007BFC10 /* commicsv1 */ = {
 			isa = PBXGroup;
 			children = (
+				1377D3F22067F39E0079A7FF /* commicsv1.entitlements */,
 				137BBA00206692AD0085F770 /* Models */,
 				13B283872063F67B007BFC10 /* AppDelegate.swift */,
 				13B283892063F67B007BFC10 /* ViewController.swift */,
@@ -126,6 +140,11 @@
 					13B283832063F67B007BFC10 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.InterAppAudio = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -310,6 +329,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = commicsv1/commicsv1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HM89W9L4FK;
 				INFOPLIST_FILE = commicsv1/Info.plist;
@@ -325,6 +345,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = commicsv1/commicsv1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = HM89W9L4FK;
 				INFOPLIST_FILE = commicsv1/Info.plist;

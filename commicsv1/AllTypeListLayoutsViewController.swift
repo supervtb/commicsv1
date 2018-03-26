@@ -13,7 +13,11 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
     var delegate: SecondVCDelegate?
     
     var arrayNamesLayout = [TypeOfLayouts(nameLayout: "threeRow", nameIconLayout: "threeRow"),
-                            TypeOfLayouts(nameLayout: "twoRow", nameIconLayout: "threeRow")]
+                            TypeOfLayouts(nameLayout: "twoRow", nameIconLayout: "threeRow"),
+                             TypeOfLayouts(nameLayout: "three", nameIconLayout: "threeRow"),
+                             TypeOfLayouts(nameLayout: "four", nameIconLayout: "threeRow"),
+                              TypeOfLayouts(nameLayout: "five", nameIconLayout: "threeRow")
+                            ]
 
     var namesView = [String]()
     var namesIconView = [String]()
@@ -35,17 +39,12 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CellCollectionViewCell
-        cell.label.text = namesView[indexPath.row]
         cell.bttnLayout.setImage(UIImage(named: namesIconView[indexPath.row]), for: .normal)
         cell.bttnLayout.accessibilityIdentifier = namesView[indexPath.row]
         return cell
         
     }
-   
-    @IBAction func addNewPage(_ sender: UIButton) {
-       
-        delegate?.addSelectedTemplate(identify: sender.accessibilityIdentifier!)
-    }
+
     
     @IBAction func selectingLayout(_ sender: UIButton) {
          delegate?.addSelectedTemplate(identify: sender.accessibilityIdentifier!)
