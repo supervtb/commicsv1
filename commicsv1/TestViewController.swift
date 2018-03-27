@@ -20,6 +20,11 @@ protocol SecondVCDelegate {
 
 class TestViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
    
+    @IBOutlet var popUp: UIView!
+   
+    
+    
+    
     var longPressRecognizer = UILongPressGestureRecognizer()
     var pinchToZoomRecognizer = UIPinchGestureRecognizer()
     var rotationRecognizer = UIRotationGestureRecognizer()
@@ -38,6 +43,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     override func viewDidLoad() {
         super.viewDidLoad()
         generateRecognizers(amountOfRecognizers: self.view.subviews.count)
+       
         
     }
 
@@ -81,7 +87,6 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             imageView.addGestureRecognizer(arrayOfRotationRecognizers.last!)
             imageView.addGestureRecognizer(arrayOfMoveRecognizers.last!)
             currentViewOnPage.clipsToBounds = true
-            
             currentViewOnPage.addSubview(imageView)
                 
                 arrayOfLongPressRecognizers.removeLast()
@@ -98,7 +103,28 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     @IBAction func addVideo(_ sender: UIButton) {
        }
     
-
+    @IBAction func callPopUp(_ sender: UIButton) {
+        openPopUp()
+    }
+    
+    @IBAction func dissmissPopUp(_ sender: UIButton) {
+        closePopUp()
+    }
+    
+    
+    func openPopUp(){
+       // self.view.addSubview(popUp)
+       // popUp.center = self.view.center
+        
+       
+       
+        
+    }
+    
+    func closePopUp(){
+        self.popUp.removeFromSuperview()
+    }
+    
     @objc func handleTap(recognizer: UITapGestureRecognizer) {
        recognizer.view?.removeFromSuperview()
     }
