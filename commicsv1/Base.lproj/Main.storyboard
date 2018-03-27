@@ -152,18 +152,19 @@
                                 <rect key="frame" x="136" y="199" width="223" height="410"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="82s-dX-KxV">
-                                        <rect key="frame" x="75" y="190" width="107" height="75"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="addimage:" destination="DdA-Hy-FIV" eventType="touchUpInside" id="eNP-b2-3IR"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aK2-2z-miy">
                                         <rect key="frame" x="201" y="379" width="14" height="23"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
                                             <action selector="addVideo:" destination="DdA-Hy-FIV" eventType="touchUpInside" id="ZYk-kJ-cKS"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="82s-dX-KxV">
+                                        <rect key="frame" x="0.0" y="0.0" width="223" height="410"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Add photo"/>
+                                        <connections>
+                                            <action selector="addimage:" destination="DdA-Hy-FIV" eventType="touchUpInside" id="eNP-b2-3IR"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -175,8 +176,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u3b-pN-2Jp">
-                                        <rect key="frame" x="8" y="167" width="96" height="77"/>
+                                        <rect key="frame" x="8" y="8" width="96" height="394"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Add photo"/>
                                         <connections>
                                             <action selector="addimage:" destination="DdA-Hy-FIV" eventType="touchUpInside" id="f2O-HS-Kgh"/>
                                         </connections>
@@ -189,8 +191,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ez9-Sy-d1o">
-                                        <rect key="frame" x="65" y="28" width="213" height="115"/>
+                                        <rect key="frame" x="8" y="8" width="335" height="163"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Add photo"/>
                                         <connections>
                                             <action selector="addimage:" destination="DdA-Hy-FIV" eventType="touchUpInside" id="f5m-lm-nOr"/>
                                         </connections>
