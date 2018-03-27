@@ -67,7 +67,6 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         image.mediaTypes = ["public.image", "public.movie"]
         self.present(image, animated: true, completion: nil)
         
-        
     }
     
    
