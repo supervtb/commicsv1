@@ -10,6 +10,7 @@ import UIKit
 import AVKit
 import AVFoundation
 
+
 protocol SecondVCDelegate {
     func addNewPage()
     func addSelectedTemplate(identify: String)
@@ -19,51 +20,25 @@ protocol SecondVCDelegate {
 
 class TestViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
    
-    var tapRecognizer = UILongPressGestureRecognizer()
-    
+    var longPressRecognizer = UILongPressGestureRecognizer()
     var pinchToZoomRecognizer = UIPinchGestureRecognizer()
-    
-    
     var rotationRecognizer = UIRotationGestureRecognizer()
-    
     var moveRecognizer = UIPanGestureRecognizer()
     
     var delegate: SecondVCDelegate?
     
-     var currentViewOnPage = UIView()
+    var currentViewOnPage = UIView()
     
+    var arrayOfLongPressRecognizers = [UILongPressGestureRecognizer()]
     var arrayOfPinchRecognizers = [UIPinchGestureRecognizer()]
+    var arrayOfRotationRecognizers = [UIRotationGestureRecognizer()]
+    var arrayOfMoveRecognizers = [UIPanGestureRecognizer()]
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tapRecognizer = UILongPressGestureRecognizer(target: self,
-                                                action:#selector(handleTap(recognizer:)))
+        generateRecognizers(amountOfRecognizers: self.view.subviews.count)
         
-        for _ in 0..<self.view.subviews.count{
-            pinchToZoomRecognizer = UIPinchGestureRecognizer(target: self,
-                                                                 action:#selector(handlePinch(recognizer:)))
-            arrayOfPinchRecognizers.append(pinchToZoomRecognizer)
-            
-        }
-    
-        
-      
-        
-        rotationRecognizer = UIRotationGestureRecognizer(target: self,
-                                                         action:#selector(handleRotate(recognizer:)))
-        
-        moveRecognizer = UIPanGestureRecognizer(target: self,
-                                                         action:#selector(handlePan(recognizer:)))
-        
-        
-      
-     
-       tapRecognizer.delegate = self as? UIGestureRecognizerDelegate
-       pinchToZoomRecognizer.delegate = self as? UIGestureRecognizerDelegate
-       rotationRecognizer.delegate = self as? UIGestureRecognizerDelegate
-       moveRecognizer.delegate = self as? UIGestureRecognizerDelegate
-        
-       
     }
 
     override func didReceiveMemoryWarning() {
@@ -102,18 +77,19 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: 0, y: 0, width: currentViewOnPage.bounds.width, height: currentViewOnPage.bounds.height)
             imageView.isUserInteractionEnabled = true
-            imageView.addGestureRecognizer(tapRecognizer)
-          
-                imageView.addGestureRecognizer(arrayOfPinchRecognizers.last!)
-                
-               
-           
-                imageView.addGestureRecognizer(rotationRecognizer)
-            imageView.addGestureRecognizer(moveRecognizer)
-                currentViewOnPage.clipsToBounds = true
+            imageView.addGestureRecognizer(arrayOfLongPressRecognizers.last!)
+            imageView.addGestureRecognizer(arrayOfPinchRecognizers.last!)
+            imageView.addGestureRecognizer(arrayOfRotationRecognizers.last!)
+            imageView.addGestureRecognizer(arrayOfMoveRecognizers.last!)
+            currentViewOnPage.clipsToBounds = true
+            
             currentViewOnPage.addSubview(imageView)
+                
+                arrayOfLongPressRecognizers.removeLast()
                 arrayOfPinchRecognizers.removeLast()
-                }
+                arrayOfRotationRecognizers.removeLast()
+                arrayOfMoveRecognizers.removeLast()
+            }
            self.dismiss(animated: true, completion: nil)
             
            
@@ -147,6 +123,31 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             recognizer.view?.center = CGPoint(x: changeX, y: changeY)
             recognizer.setTranslation(CGPoint.zero, in: recognizer.view)
         }
+    }
+    
+    func generateRecognizers(amountOfRecognizers: Int){
+        for _ in 0..<amountOfRecognizers {
+            longPressRecognizer = UILongPressGestureRecognizer(target: self,
+                                                         action:#selector(handleTap(recognizer:)))
+            pinchToZoomRecognizer = UIPinchGestureRecognizer(target: self,
+                                                             action:#selector(handlePinch(recognizer:)))
+            rotationRecognizer = UIRotationGestureRecognizer(target: self,
+                                                             action:#selector(handleRotate(recognizer:)))
+            moveRecognizer = UIPanGestureRecognizer(target: self,
+                                                    action:#selector(handlePan(recognizer:)))
+            
+            arrayOfLongPressRecognizers.append(longPressRecognizer)
+            arrayOfPinchRecognizers.append(pinchToZoomRecognizer)
+            arrayOfRotationRecognizers.append(rotationRecognizer)
+            arrayOfMoveRecognizers.append(moveRecognizer)
+            
+        }
+        
+        longPressRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        pinchToZoomRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        rotationRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        moveRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        
     }
     
     
