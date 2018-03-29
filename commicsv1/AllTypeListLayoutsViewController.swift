@@ -49,4 +49,9 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
     @IBAction func selectingLayout(_ sender: UIButton) {
          delegate?.addSelectedTemplate(identify: sender.accessibilityIdentifier!)
     }
+    @IBAction func getAllViews(_ sender: UIButton) {
+    
+    }
+    
+    
 }

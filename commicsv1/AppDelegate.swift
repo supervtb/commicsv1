@@ -9,6 +9,10 @@
 import UIKit
 import CoreData
 
+import RealmSwift
+
+var realm = try! Realm()
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -39,8 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        // Saves changes in the application's managed object context before the application terminates.
+        try! realm.write {
+            realm.deleteAll()
+        }
         self.saveContext()
     }
 
@@ -88,6 +93,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+  
 
 }
 

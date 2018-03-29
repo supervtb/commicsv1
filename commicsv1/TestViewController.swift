@@ -10,6 +10,9 @@ import UIKit
 import AVKit
 import AVFoundation
 
+import Realm 
+
+
 
 protocol SecondVCDelegate {
     func addNewPage()
