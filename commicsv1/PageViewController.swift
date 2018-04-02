@@ -19,6 +19,7 @@ UIPageViewControllerDataSource, SecondVCDelegate {
     
     var commics = Pages()
     
+    
    
     
     var index = 0
@@ -137,7 +138,7 @@ UIPageViewControllerDataSource, SecondVCDelegate {
         let removingPage = allPages[index-1]
         try! realm.write {
              commics.arrayPages.remove(at: index-1)
-          //  realm.delete(removingPage) проверить когда коммиксов больше
+            realm.delete(removingPage)
             
         }
         pages.remove(at: index)
@@ -146,10 +147,11 @@ UIPageViewControllerDataSource, SecondVCDelegate {
         
     }
     
-    func addPhotoToDB(image: UIImage) {
+    func addPhotoToDB(image: UIImage, tag: Int) {
         let newImage = Image()
-        newImage.imageData = UIImageJPEGRepresentation(image, 1)! as Data
-       // newImage.rotation =
+       newImage.imageData = UIImageJPEGRepresentation(image, 0)! as Data
+        newImage.tag = tag
+      
          try! realm.write {
          
             commics.arrayPages[index-1].arrayImages.append(newImage)
@@ -158,22 +160,42 @@ UIPageViewControllerDataSource, SecondVCDelegate {
        
     }
     
-    func removePhotoFromDb(image : UIImage){
-         let newImage = Image()
-        newImage.imageData = UIImageJPEGRepresentation(image, 1)! as Data
-        
+    
+    
+    func removePhotoFromDb(pageNumber: Int, tagPhoto: Int){
+     
+        let commics = realm.objects(Pages.self).first
+        let pages = commics?.arrayPages[pageNumber]
+        let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
+            item.tag == tagPhoto
+        })
+        if indexImg != nil {
+            var removableImage = commics?.arrayPages[index-1].arrayImages[indexImg!]
         try! realm.write {
-            commics.arrayPages[index-1].arrayImages.removeAll()
+            commics?.arrayPages[index - 1].arrayImages.remove(at: indexImg!)
+            realm.delete(removableImage!)
         }
+            
+        }
+        
+        
         
     }
     
+    func getCountAllLoadedPages() -> Int {
+        return pages.count
+    }
+    
+    
+    
     func getCurrentPageIndex() -> Int {
-        return index
+       
+       return index
+        
     }
     
   
-    
+   
     
     
    

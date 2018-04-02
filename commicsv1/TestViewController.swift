@@ -18,8 +18,9 @@ protocol SecondVCDelegate {
     func addNewPage()
     func addSelectedTemplate(identify: String)
     func removeCurrentPage()
-    func addPhotoToDB(image : UIImage)
-    func removePhotoFromDb(image : UIImage)
+    func addPhotoToDB(image : UIImage, tag: Int)
+    func removePhotoFromDb(pageNumber : Int, tagPhoto: Int)
+    func getCountAllLoadedPages() -> Int
     func getCurrentPageIndex() -> Int
    }
 
@@ -46,34 +47,55 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     var arrayOfRotationRecognizers = [UIRotationGestureRecognizer()]
     var arrayOfMoveRecognizers = [UIPanGestureRecognizer()]
     
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         generateRecognizers(amountOfRecognizers: self.view.subviews.count)
         
+        let countOfLoadedPages = delegate?.getCountAllLoadedPages()
+        
+        let r = delegate?.getCurrentPageIndex()
        
+        if  countOfLoadedPages! > 1 {
+    
+            let allViewsOnPage = view.subviews
+            for viewOnPage in allViewsOnPage{
 
-        let myv = view.subviews.filter{$0 is UIView}
-        for i in myv{
+                if viewOnPage.tag > 0  {
 
-            if i.tag > 0 {
-                
-                
-          
-                var imageView = getImageFromDB(tag: i.tag)
-                if imageView != nil {  
-                imageView?.frame=CGRect(x: 0, y: 0, width: i.bounds.width, height: i.bounds.height)
-           i.clipsToBounds = true
-                
-                i.addSubview(imageView!)
-             
-                imageView?.isUserInteractionEnabled = true
-                
-                imageView?.addGestureRecognizer(arrayOfMoveRecognizers.last!)
-                imageView?.addGestureRecognizer(arrayOfPinchRecognizers.last!) }
-                
+                    
+                   
+
+                    let imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: r! )
+                    if imageView != nil {
+                        imageView?.frame=CGRect(x: 0, y: 0, width: viewOnPage.bounds.width, height: viewOnPage.bounds.height)
+                        viewOnPage.clipsToBounds = true
+
+                        viewOnPage.addSubview(imageView!)
+
+                        imageView?.isUserInteractionEnabled = true
+
+                        imageView?.addGestureRecognizer(arrayOfMoveRecognizers.last!)
+                        arrayOfMoveRecognizers.removeLast()
+                        imageView?.addGestureRecognizer(arrayOfPinchRecognizers.last!)
+                        arrayOfPinchRecognizers.removeLast()
+                        imageView?.addGestureRecognizer(arrayOfLongPressRecognizers.last!)
+                        arrayOfLongPressRecognizers.removeLast()
+
+                    }
+                }
             }
+   
         }
+
+
+        
+      
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+      
     }
 
     override func didReceiveMemoryWarning() {
@@ -99,7 +121,9 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         image.delegate = self
         image.sourceType = .photoLibrary
         image.allowsEditing = false
-        image.mediaTypes = ["public.image", "public.movie"]
+        image.mediaTypes = ["public.image"]
+        image.view.tag = sender.tag
+        
         self.present(image, animated: true, completion: nil)
         
     }
@@ -125,8 +149,9 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             arrayOfMoveRecognizers.removeLast()
                 
                 
+               
                 
-                delegate?.addPhotoToDB(image: image)
+                delegate?.addPhotoToDB(image: image, tag: picker.view.tag)
            
                 
             }
@@ -157,14 +182,14 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     @objc func handleTap(recognizer: UITapGestureRecognizer) {
-//
-//        let myViews = recognizer.view as! UIImageView
-//        print()
-//        let im = myViews.image
-//
-//        delegate?.removePhotoFromDb(image: im!)
-//        recognizer.view?.removeFromSuperview()
-//
+
+        let myViews = recognizer.view as! UIImageView
+      
+        let im = myViews.image
+        var tt = (delegate?.getCurrentPageIndex())! - 1
+        delegate?.removePhotoFromDb(pageNumber: tt, tagPhoto: (myViews.superview?.tag)! )
+        recognizer.view?.removeFromSuperview()
+
     }
     
     @objc func handlePinch(recognizer: UIPinchGestureRecognizer) {
@@ -213,27 +238,32 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
     }
     
-    func  getImageFromDB(tag: Int)-> UIImageView? {
-        var currentPageIndex = delegate?.getCurrentPageIndex()
-        print(currentPageIndex)
-      let commics = realm.objects(Pages.self).first
-        if currentPageIndex != 0 {
-        let firstpage = commics?.arrayPages[currentPageIndex!]
-
-        let index = firstpage?.arrayImages.index(where: { (item) -> Bool in
+   
+    
+    func  getImageFromDB(tag: Int, pageNumber: Int)-> UIImageView? {
+        let commics = realm.objects(Pages.self).first
+      
+        if pageNumber < (commics?.arrayPages.count)! {
+        
+        
+        let pages = commics?.arrayPages[pageNumber]
+        let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
             item.tag == tag
         })
-
-
-        let imgage = firstpage?.arrayImages[index!]
-        let returnedimg = UIImageView(image: UIImage(data: (imgage?.imageData)!))
-      
-        
-       
-        return returnedimg
+        if indexImg != nil {
+        let img = pages?.arrayImages[indexImg!]
+        let returned = UIImageView(image: UIImage(data: (img?.imageData)!))
+        return returned
         }
-        else { return nil }
-      
+        else{
+            return nil
+        }
+        }
+        else {
+            return nil
+        }
+    
+        
     }
     
     

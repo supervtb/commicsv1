@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Now that we've told Realm how to handle the schema change, opening the file
         // will automatically perform the migration
-        let realm = try! Realm()
+        _ = try! Realm()
         
         return true
     }
