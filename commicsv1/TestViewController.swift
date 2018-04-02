@@ -17,7 +17,10 @@ import Realm
 protocol SecondVCDelegate {
     func addNewPage()
     func addSelectedTemplate(identify: String)
-     func removeCurrentPage()
+    func removeCurrentPage()
+    func addPhotoToDB(image : UIImage)
+    func removePhotoFromDb(image : UIImage)
+    func getCurrentPageIndex() -> Int
    }
 
 
@@ -25,6 +28,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
    
     @IBOutlet var popUp: UIView!
    
+    
     
     
     
@@ -46,8 +50,30 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     override func viewDidLoad() {
         super.viewDidLoad()
         generateRecognizers(amountOfRecognizers: self.view.subviews.count)
-       
         
+       
+
+        let myv = view.subviews.filter{$0 is UIView}
+        for i in myv{
+
+            if i.tag > 0 {
+                
+                
+          
+                var imageView = getImageFromDB(tag: i.tag)
+                if imageView != nil {  
+                imageView?.frame=CGRect(x: 0, y: 0, width: i.bounds.width, height: i.bounds.height)
+           i.clipsToBounds = true
+                
+                i.addSubview(imageView!)
+             
+                imageView?.isUserInteractionEnabled = true
+                
+                imageView?.addGestureRecognizer(arrayOfMoveRecognizers.last!)
+                imageView?.addGestureRecognizer(arrayOfPinchRecognizers.last!) }
+                
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -89,13 +115,20 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             imageView.addGestureRecognizer(arrayOfPinchRecognizers.last!)
             imageView.addGestureRecognizer(arrayOfRotationRecognizers.last!)
             imageView.addGestureRecognizer(arrayOfMoveRecognizers.last!)
+           
+               
             currentViewOnPage.clipsToBounds = true
             currentViewOnPage.addSubview(imageView)
+            arrayOfLongPressRecognizers.removeLast()
+            arrayOfPinchRecognizers.removeLast()
+            arrayOfRotationRecognizers.removeLast()
+            arrayOfMoveRecognizers.removeLast()
                 
-                arrayOfLongPressRecognizers.removeLast()
-                arrayOfPinchRecognizers.removeLast()
-                arrayOfRotationRecognizers.removeLast()
-                arrayOfMoveRecognizers.removeLast()
+                
+                
+                delegate?.addPhotoToDB(image: image)
+           
+                
             }
            self.dismiss(animated: true, completion: nil)
             
@@ -116,12 +149,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     
     func openPopUp(){
-       // self.view.addSubview(popUp)
-       // popUp.center = self.view.center
-        
        
-       
-        
     }
     
     func closePopUp(){
@@ -129,7 +157,14 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     @objc func handleTap(recognizer: UITapGestureRecognizer) {
-       recognizer.view?.removeFromSuperview()
+//
+//        let myViews = recognizer.view as! UIImageView
+//        print()
+//        let im = myViews.image
+//
+//        delegate?.removePhotoFromDb(image: im!)
+//        recognizer.view?.removeFromSuperview()
+//
     }
     
     @objc func handlePinch(recognizer: UIPinchGestureRecognizer) {
@@ -178,9 +213,37 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
     }
     
+    func  getImageFromDB(tag: Int)-> UIImageView? {
+        var currentPageIndex = delegate?.getCurrentPageIndex()
+        print(currentPageIndex)
+      let commics = realm.objects(Pages.self).first
+        if currentPageIndex != 0 {
+        let firstpage = commics?.arrayPages[currentPageIndex!]
+
+        let index = firstpage?.arrayImages.index(where: { (item) -> Bool in
+            item.tag == tag
+        })
+
+
+        let imgage = firstpage?.arrayImages[index!]
+        let returnedimg = UIImageView(image: UIImage(data: (imgage?.imageData)!))
+      
+        
+       
+        return returnedimg
+        }
+        else { return nil }
+      
+    }
+    
+    
+  
+    
     
     
    
   
     
 }
+
+

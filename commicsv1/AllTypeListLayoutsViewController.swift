@@ -12,8 +12,8 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
     
     var delegate: SecondVCDelegate?
     
-    var arrayNamesLayout = [TypeOfLayouts(nameLayout: "threeRow", nameIconLayout: "threeRow"),
-                            TypeOfLayouts(nameLayout: "twoRow", nameIconLayout: "threeRow"),
+    var arrayNamesLayout = [TypeOfLayouts(nameLayout: "one", nameIconLayout: "threeRow"),
+                            TypeOfLayouts(nameLayout: "two", nameIconLayout: "threeRow"),
                              TypeOfLayouts(nameLayout: "three", nameIconLayout: "threeRow"),
                              TypeOfLayouts(nameLayout: "four", nameIconLayout: "threeRow"),
                               TypeOfLayouts(nameLayout: "five", nameIconLayout: "threeRow")
@@ -50,7 +50,7 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
          delegate?.addSelectedTemplate(identify: sender.accessibilityIdentifier!)
     }
     @IBAction func getAllViews(_ sender: UIButton) {
-    
+      
     }
     
     

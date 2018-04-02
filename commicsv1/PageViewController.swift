@@ -12,6 +12,14 @@ import RealmSwift
 
 class PageViewController: UIPageViewController, UIPageViewControllerDelegate,
 UIPageViewControllerDataSource, SecondVCDelegate {
+ 
+    
+    
+
+    
+    var commics = Pages()
+    
+   
     
     var index = 0
     
@@ -19,7 +27,13 @@ UIPageViewControllerDataSource, SecondVCDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dataSource = self
-            
+        
+        if realm.objects(Pages.self).first != nil {
+            commics = realm.objects(Pages.self).first!
+        }
+        
+        
+
             let sb = UIStoryboard(name: "Main", bundle:nil)
             if let vc0 = sb.instantiateViewController(withIdentifier: "all") as? AllTypeListLayoutsViewController {
                vc0.delegate = self
@@ -28,24 +42,21 @@ UIPageViewControllerDataSource, SecondVCDelegate {
                 
             }
             if let firstViewController = pages.first{
-            self.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
+           self.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
            }
         
-        
-     
-        let pa = realm.objects(Page.self)
-        
-      
-        
-        if pages.count < 2 && pa.count > 0 {
-        
-        for p in pa {
-            if let vc = sb.instantiateViewController(withIdentifier: p.name) as? TestViewController {
-                vc.delegate = self
-                self.pages.append(vc)
-                }
+        if pages.count < 2 && commics.arrayPages.count > 0 {
+            
+            for pageFromCommics in commics.arrayPages{
+                if let vc = sb.instantiateViewController(withIdentifier: pageFromCommics.name) as? TestViewController {
+                                    vc.delegate = self
+                    
+                 
+                    
+                                    self.pages.append(vc)
+                                    }
             }
-    }
+        }
         }
         
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -56,8 +67,14 @@ UIPageViewControllerDataSource, SecondVCDelegate {
         
         guard pages.count > previousIndex else { return nil }
         
-        index = previousIndex + 1
       
+          index = viewControllerIndex
+        
+       
+      
+        
+        
+        
        
         return pages[previousIndex]
     }
@@ -67,7 +84,9 @@ UIPageViewControllerDataSource, SecondVCDelegate {
         
         let nextIndex = viewControllerIndex + 1
         
-        index = nextIndex - 1
+       
+        
+        index = viewControllerIndex
         
         guard nextIndex < pages.count else { return nil }
         
@@ -98,11 +117,18 @@ UIPageViewControllerDataSource, SecondVCDelegate {
             self.pages.append(vc1)
             setViewControllers([vc1], direction: .forward, animated: true, completion: nil)
             index = index+1
+            
             let newPage = Page()
             newPage.name = identify
+            newPage.index = index
+            
+           
             try! realm.write {
-                realm.add(newPage)
+                 commics.arrayPages.append(newPage)
             }
+           
+            
+
          }
     }
     
@@ -110,22 +136,43 @@ UIPageViewControllerDataSource, SecondVCDelegate {
         let allPages = realm.objects(Page.self)
         let removingPage = allPages[index-1]
         try! realm.write {
-                        realm.delete(removingPage)
-                    }
-        
-      pages.remove(at: index)
+             commics.arrayPages.remove(at: index-1)
+          //  realm.delete(removingPage) проверить когда коммиксов больше
+            
+        }
+        pages.remove(at: index)
         setViewControllers([pages[index-1]], direction: .forward, animated: true, completion: nil)
         index = index-1
         
+    }
     
-      
-       
-       
+    func addPhotoToDB(image: UIImage) {
+        let newImage = Image()
+        newImage.imageData = UIImageJPEGRepresentation(image, 1)! as Data
+       // newImage.rotation =
+         try! realm.write {
+         
+            commics.arrayPages[index-1].arrayImages.append(newImage)
+        }
+        
        
     }
     
+    func removePhotoFromDb(image : UIImage){
+         let newImage = Image()
+        newImage.imageData = UIImageJPEGRepresentation(image, 1)! as Data
+        
+        try! realm.write {
+            commics.arrayPages[index-1].arrayImages.removeAll()
+        }
+        
+    }
     
+    func getCurrentPageIndex() -> Int {
+        return index
+    }
     
+  
     
     
     

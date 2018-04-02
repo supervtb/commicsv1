@@ -14,6 +14,8 @@ class Page: Object {
     
     @objc dynamic var name = ""
     @objc dynamic var index = 0
+    let arrayImages =  List<Image>()
+    
     
     
     
