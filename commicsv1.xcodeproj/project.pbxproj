@@ -12,6 +12,7 @@
 		137BBA02206692DE0085F770 /* TypeOfLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA01206692DE0085F770 /* TypeOfLayouts.swift */; };
 		137BBA0A2066D02D0085F770 /* AllTypeListLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA092066D02D0085F770 /* AllTypeListLayoutsViewController.swift */; };
 		137BBA0C2066D58E0085F770 /* CellCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA0B2066D58E0085F770 /* CellCollectionViewCell.swift */; };
+		13837A9120738D090075C0B3 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13837A9020738D090075C0B3 /* DatabaseService.swift */; };
 		1392054A206A98D60055F2EB /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 13920549206A98D60055F2EB /* Podfile */; };
 		1392DB87206B823500E93D19 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1392DB86206B823500E93D19 /* Page.swift */; };
 		1392DB89206B8AAC00E93D19 /* Pages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1392DB88206B8AAC00E93D19 /* Pages.swift */; };
@@ -34,6 +35,7 @@
 		137BBA01206692DE0085F770 /* TypeOfLayouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeOfLayouts.swift; sourceTree = "<group>"; };
 		137BBA092066D02D0085F770 /* AllTypeListLayoutsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllTypeListLayoutsViewController.swift; sourceTree = "<group>"; };
 		137BBA0B2066D58E0085F770 /* CellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellCollectionViewCell.swift; sourceTree = "<group>"; };
+		13837A9020738D090075C0B3 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		13920549206A98D60055F2EB /* Podfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1392DB86206B823500E93D19 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		1392DB88206B8AAC00E93D19 /* Pages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pages.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				1392DB86206B823500E93D19 /* Page.swift */,
 				1392DB88206B8AAC00E93D19 /* Pages.swift */,
 				1392DB8C206E740200E93D19 /* Image.swift */,
+				13837A9020738D090075C0B3 /* DatabaseService.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				1392DB87206B823500E93D19 /* Page.swift in Sources */,
 				13276B662064388D0092131C /* LayoutFirstViewController.swift in Sources */,
 				137BBA02206692DE0085F770 /* TypeOfLayouts.swift in Sources */,
+				13837A9120738D090075C0B3 /* DatabaseService.swift in Sources */,
 				13B283902063F67B007BFC10 /* commicsv1.xcdatamodeld in Sources */,
 				13E46A09206524A00096916A /* TestViewController.swift in Sources */,
 				13B2839D2063F8EA007BFC10 /* PageViewController.swift in Sources */,

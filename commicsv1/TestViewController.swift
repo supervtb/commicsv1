@@ -22,6 +22,9 @@ protocol SecondVCDelegate {
     func removePhotoFromDb(pageNumber : Int, tagPhoto: Int)
     func getCountAllLoadedPages() -> Int
     func getCurrentPageIndex() -> Int
+    func saveChangesPan(pageNumber : Int, tagPhoto: Int, changeX: Double, changeY : Double )
+    func saveChangesRotationAngle(pageNumber : Int, tagPhoto: Int, rotationA: Double, rotationB: Double )
+    func saveChangesZoomValue(pageNumber : Int, tagPhoto: Int, zoomX: Double, zoomY: Double )
    }
 
 
@@ -30,7 +33,10 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     @IBOutlet var popUp: UIView!
    
     
-    
+    var changeX = 0.0
+    var changeY = 0.0
+    var rotationA = 0.0
+     var rotationB = 0.0
     
     
     var longPressRecognizer = UILongPressGestureRecognizer()
@@ -55,7 +61,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
         let countOfLoadedPages = delegate?.getCountAllLoadedPages()
         
-        let r = delegate?.getCurrentPageIndex()
+        let currentPageIndex = delegate?.getCurrentPageIndex()
        
         if  countOfLoadedPages! > 1 {
     
@@ -64,16 +70,27 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
 
                 if viewOnPage.tag > 0  {
 
-                    
+                    var currentImageObject = getLoadedImageObject(tag: viewOnPage.tag, pageNumber: currentPageIndex!)
                    
 
-                    let imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: r! )
+                    let imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: currentPageIndex! )
                     if imageView != nil {
-                        imageView?.frame=CGRect(x: 0, y: 0, width: viewOnPage.bounds.width, height: viewOnPage.bounds.height)
-                        viewOnPage.clipsToBounds = true
-
+                        imageView?.frame=CGRect(x:0, y: 0, width: viewOnPage.bounds.width, height: viewOnPage.bounds.height)
+                        
+                        if currentImageObject?.isChanged == true {
+                            let radians = atan2((currentImageObject?.rotationB)!, (currentImageObject?.rotationA)!)
+                            
+                            imageView?.transform = CGAffineTransform.identity.rotated(by: CGFloat(radians))
+                                .scaledBy(x: CGFloat((currentImageObject?.x)!), y: CGFloat((currentImageObject?.y)!))
+                          
+                            imageView?.center = CGPoint(x: (currentImageObject?.changeX)!, y: (currentImageObject?.changeY)!)
+                           
+                            
+                           
+                         }
+                       viewOnPage.clipsToBounds = true
                         viewOnPage.addSubview(imageView!)
-
+                        
                         imageView?.isUserInteractionEnabled = true
 
                         imageView?.addGestureRecognizer(arrayOfMoveRecognizers.last!)
@@ -82,6 +99,8 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
                         arrayOfPinchRecognizers.removeLast()
                         imageView?.addGestureRecognizer(arrayOfLongPressRecognizers.last!)
                         arrayOfLongPressRecognizers.removeLast()
+                        imageView?.addGestureRecognizer(arrayOfRotationRecognizers.last!)
+                        arrayOfRotationRecognizers.removeLast()
 
                     }
                 }
@@ -93,10 +112,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
       
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-      
-    }
+   
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -140,21 +156,16 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             imageView.addGestureRecognizer(arrayOfRotationRecognizers.last!)
             imageView.addGestureRecognizer(arrayOfMoveRecognizers.last!)
            
-               
             currentViewOnPage.clipsToBounds = true
             currentViewOnPage.addSubview(imageView)
             arrayOfLongPressRecognizers.removeLast()
             arrayOfPinchRecognizers.removeLast()
             arrayOfRotationRecognizers.removeLast()
             arrayOfMoveRecognizers.removeLast()
-                
-                
-               
-                
-                delegate?.addPhotoToDB(image: image, tag: picker.view.tag)
+            
+            delegate?.addPhotoToDB(image: image, tag: picker.view.tag)
            
-                
-            }
+                }
            self.dismiss(animated: true, completion: nil)
             
            
@@ -194,22 +205,49 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     @objc func handlePinch(recognizer: UIPinchGestureRecognizer) {
        recognizer.view?.transform = CGAffineTransform(scaleX: recognizer.scale, y: recognizer.scale)
-      
+        if recognizer.state == .ended{
+            var currentPage = delegate?.getCurrentPageIndex()
+            delegate?.saveChangesZoomValue(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
+                                           zoomX: Double(recognizer.scale),
+                                           zoomY: Double(recognizer.scale) )
+        }
     }
     
     @objc func handleRotate(recognizer: UIRotationGestureRecognizer) {
         recognizer.view?.transform =  (recognizer.view?.transform.rotated(by: recognizer.rotation))!
-        recognizer.rotation = 0
-        
+       
+        if recognizer.state == .ended {
+            var currentPage = delegate?.getCurrentPageIndex()
+            delegate?.saveChangesRotationAngle(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
+                                               rotationA: Double((recognizer.view?.transform.a)!),
+                                               rotationB: Double((recognizer.view?.transform.b)!))
+            
+         
+            
+        }
+       
+         recognizer.rotation = 0
     }
     
     @objc func handlePan(recognizer: UIPanGestureRecognizer) {
+        
         if recognizer.state == .began || recognizer.state == .changed {
             let translation = recognizer.translation(in: recognizer.view)
             let changeX = (recognizer.view?.center.x)! + translation.x
             let changeY = (recognizer.view?.center.y)! + translation.y
             recognizer.view?.center = CGPoint(x: changeX, y: changeY)
             recognizer.setTranslation(CGPoint.zero, in: recognizer.view)
+            self.changeX = Double(changeX)
+            self.changeY = Double(changeY)
+        }
+        if recognizer.state == .ended {
+          
+            var currentPage = delegate?.getCurrentPageIndex()
+            delegate?.saveChangesPan(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
+                                  changeX: changeX, changeY: changeY )
+            
+            changeX = 0.0
+            changeY = 0.0
         }
     }
     
@@ -252,6 +290,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         })
         if indexImg != nil {
         let img = pages?.arrayImages[indexImg!]
+           
         let returned = UIImageView(image: UIImage(data: (img?.imageData)!))
         return returned
         }
@@ -266,6 +305,31 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
     }
     
+    func getLoadedImageObject(tag: Int, pageNumber: Int) -> Image? {
+        let commics = realm.objects(Pages.self).first
+        
+        if pageNumber < (commics?.arrayPages.count)! {
+            
+            
+            let pages = commics?.arrayPages[pageNumber]
+            let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
+                item.tag == tag
+            })
+            if indexImg != nil {
+                let img = pages?.arrayImages[indexImg!]
+                
+             return img
+            }
+            else{
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+        
+    }
+   
     
   
     
