@@ -25,6 +25,7 @@ protocol SecondVCDelegate {
     func saveChangesPan(pageNumber : Int, tagPhoto: Int, changeX: Double, changeY : Double )
     func saveChangesRotationAngle(pageNumber : Int, tagPhoto: Int, rotationA: Double, rotationB: Double )
     func saveChangesZoomValue(pageNumber : Int, tagPhoto: Int, zoomX: Double, zoomY: Double )
+    func getCurrentIdCommics() -> Int
    }
 
 
@@ -70,7 +71,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
 
                 if viewOnPage.tag > 0  {
 
-                    var currentImageObject = getLoadedImageObject(tag: viewOnPage.tag, pageNumber: currentPageIndex!)
+                    let currentImageObject = getLoadedImageObject(tag: viewOnPage.tag, pageNumber: currentPageIndex!)
                    
 
                     let imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: currentPageIndex! )
@@ -83,9 +84,10 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
                             imageView?.transform = CGAffineTransform.identity.rotated(by: CGFloat(radians))
                                 .scaledBy(x: CGFloat((currentImageObject?.x)!), y: CGFloat((currentImageObject?.y)!))
                           
+                            if (currentImageObject?.changeX) != 0 && (currentImageObject?.changeY) != 0 {
                             imageView?.center = CGPoint(x: (currentImageObject?.changeX)!, y: (currentImageObject?.changeY)!)
                            
-                            
+                            }
                            
                          }
                        viewOnPage.clipsToBounds = true
@@ -193,12 +195,9 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     @objc func handleTap(recognizer: UITapGestureRecognizer) {
-
         let myViews = recognizer.view as! UIImageView
-      
-        let im = myViews.image
-        var tt = (delegate?.getCurrentPageIndex())! - 1
-        delegate?.removePhotoFromDb(pageNumber: tt, tagPhoto: (myViews.superview?.tag)! )
+        let currentPageIndex = (delegate?.getCurrentPageIndex())! - 1
+        delegate?.removePhotoFromDb(pageNumber: currentPageIndex, tagPhoto: (myViews.superview?.tag)! )
         recognizer.view?.removeFromSuperview()
 
     }
@@ -206,7 +205,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     @objc func handlePinch(recognizer: UIPinchGestureRecognizer) {
        recognizer.view?.transform = CGAffineTransform(scaleX: recognizer.scale, y: recognizer.scale)
         if recognizer.state == .ended{
-            var currentPage = delegate?.getCurrentPageIndex()
+            let currentPage = delegate?.getCurrentPageIndex()
             delegate?.saveChangesZoomValue(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
                                            zoomX: Double(recognizer.scale),
                                            zoomY: Double(recognizer.scale) )
@@ -217,7 +216,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         recognizer.view?.transform =  (recognizer.view?.transform.rotated(by: recognizer.rotation))!
        
         if recognizer.state == .ended {
-            var currentPage = delegate?.getCurrentPageIndex()
+            let currentPage = delegate?.getCurrentPageIndex()
             delegate?.saveChangesRotationAngle(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
                                                rotationA: Double((recognizer.view?.transform.a)!),
                                                rotationB: Double((recognizer.view?.transform.b)!))
@@ -242,7 +241,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         }
         if recognizer.state == .ended {
           
-            var currentPage = delegate?.getCurrentPageIndex()
+            let currentPage = delegate?.getCurrentPageIndex()
             delegate?.saveChangesPan(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
                                   changeX: changeX, changeY: changeY )
             
@@ -279,19 +278,20 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
    
     
     func  getImageFromDB(tag: Int, pageNumber: Int)-> UIImageView? {
-        let commics = realm.objects(Pages.self).first
+         let indexCommics = delegate?.getCurrentIdCommics()
+        let commics = realm.objects(Pages.self)[indexCommics!]
       
-        if pageNumber < (commics?.arrayPages.count)! {
+        if pageNumber < (commics.arrayPages.count) {
         
         
-        let pages = commics?.arrayPages[pageNumber]
-        let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
+            let pages = commics.arrayPages[pageNumber]
+            let indexImg  = pages.arrayImages.index(where: { (item) -> Bool in
             item.tag == tag
         })
         if indexImg != nil {
-        let img = pages?.arrayImages[indexImg!]
+            let img = pages.arrayImages[indexImg!]
            
-        let returned = UIImageView(image: UIImage(data: (img?.imageData)!))
+            let returned = UIImageView(image: UIImage(data: (img.imageData)!))
         return returned
         }
         else{
@@ -306,17 +306,19 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     func getLoadedImageObject(tag: Int, pageNumber: Int) -> Image? {
-        let commics = realm.objects(Pages.self).first
+        let indexCommics = delegate?.getCurrentIdCommics()
         
-        if pageNumber < (commics?.arrayPages.count)! {
+        let commics = realm.objects(Pages.self)[indexCommics!]
+        
+        if pageNumber < (commics.arrayPages.count) {
             
             
-            let pages = commics?.arrayPages[pageNumber]
-            let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
+            let pages = commics.arrayPages[pageNumber]
+            let indexImg  = pages.arrayImages.index(where: { (item) -> Bool in
                 item.tag == tag
             })
             if indexImg != nil {
-                let img = pages?.arrayImages[indexImg!]
+                let img = pages.arrayImages[indexImg!]
                 
              return img
             }

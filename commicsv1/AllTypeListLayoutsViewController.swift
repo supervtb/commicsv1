@@ -29,6 +29,7 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
             namesView.append(name.nameLayout)
             namesIconView.append(name.nameIconLayout)
         }
+        
         collection.delegate = self
         collection.dataSource = self
     }
@@ -53,5 +54,20 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
       
     }
     
+    @IBAction func removeCurrentCommics(_ sender: UIButton) {
+        let removingCommicsId = delegate?.getCurrentIdCommics()
+        if removingCommicsId != nil {
+            DatabaseService.removeCommicsByID(idCommics: removingCommicsId!)
+            
+        }
+        self.performSegue(withIdentifier: "toFirstPage", sender: self)
+        
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var dest = segue.destination as! ViewController
+       
+    }
     
 }

@@ -12,24 +12,26 @@
 
     class PageViewController: UIPageViewController, UIPageViewControllerDelegate,
     UIPageViewControllerDataSource, SecondVCDelegate {
-       
         
-       
-       
-      
         
-     
         var commics = Pages()
         
         var index = 0
+        
+        var indexLoadedCommics = -1
         
         var pages = [UIViewController]()
         override func viewDidLoad() {
             super.viewDidLoad()
             self.dataSource = self
             
-            if realm.objects(Pages.self).first != nil {
-                commics = realm.objects(Pages.self).first!
+            if realm.objects(Pages.self)[indexLoadedCommics] != nil {
+                commics = realm.objects(Pages.self)[indexLoadedCommics]
+            }
+            else {
+                DatabaseService.createNewCommics(nameCommics: "bla")
+                commics = realm.objects(Pages.self).last!
+                
             }
             
             let sb = UIStoryboard(name: "Main", bundle:nil)
@@ -44,13 +46,9 @@
                }
             
             if pages.count < 2 && commics.arrayPages.count > 0 {
-                
                 for pageFromCommics in commics.arrayPages{
                     if let vc = sb.instantiateViewController(withIdentifier: pageFromCommics.name) as? TestViewController {
                                         vc.delegate = self
-                        
-                     
-                        
                                         self.pages.append(vc)
                                         }
                 }
@@ -132,15 +130,16 @@
         
         func removeCurrentPage(){
             let allPages = realm.objects(Page.self)
-            let removingPage = allPages[index-1]
             try! realm.write {
                  commics.arrayPages.remove(at: index-1)
-                realm.delete(removingPage)
-                
             }
             pages.remove(at: index)
-            setViewControllers([pages[index-1]], direction: .forward, animated: true, completion: nil)
+            setViewControllers([pages.first!], direction: .forward, animated: true, completion: nil)
             index = index-1
+            
+           
+            
+            
             
         }
         
@@ -205,12 +204,15 @@
            
            return index
             
+        
+        }
+        
+        func getCurrentIdCommics() -> Int {
+         return indexLoadedCommics
         }
         
       
-       
-        
-        
+    
        
 
     }
