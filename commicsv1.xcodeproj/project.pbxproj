@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		13276B662064388D0092131C /* LayoutFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13276B652064388D0092131C /* LayoutFirstViewController.swift */; };
+		1330A28420750DF8009EBE0C /* ios_license.dms in Resources */ = {isa = PBXBuildFile; fileRef = 1330A28320750DF7009EBE0C /* ios_license.dms */; };
 		1377D3F12067F39E0079A7FF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1377D3F02067F39E0079A7FF /* AudioToolbox.framework */; };
 		137BBA02206692DE0085F770 /* TypeOfLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA01206692DE0085F770 /* TypeOfLayouts.swift */; };
 		137BBA0A2066D02D0085F770 /* AllTypeListLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA092066D02D0085F770 /* AllTypeListLayoutsViewController.swift */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		13276B652064388D0092131C /* LayoutFirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutFirstViewController.swift; sourceTree = "<group>"; };
+		1330A28320750DF7009EBE0C /* ios_license.dms */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ios_license.dms; sourceTree = "<group>"; };
 		1377D3F02067F39E0079A7FF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		1377D3F22067F39E0079A7FF /* commicsv1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = commicsv1.entitlements; sourceTree = "<group>"; };
 		137BBA01206692DE0085F770 /* TypeOfLayouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeOfLayouts.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 		13837A922073FCC40075C0B3 /* MainPageControllers */ = {
 			isa = PBXGroup;
 			children = (
+				13D2FA202074F3CE00296854 /* MainViewController.swift */,
 				13B283892063F67B007BFC10 /* ViewController.swift */,
 				13837A932073FDB20075C0B3 /* CollectionViewCell.swift */,
 			);
@@ -105,7 +108,6 @@
 		13B2837B2063F67A007BFC10 = {
 			isa = PBXGroup;
 			children = (
-				13D2FA202074F3CE00296854 /* MainViewController.swift */,
 				13920549206A98D60055F2EB /* Podfile */,
 				13B283862063F67B007BFC10 /* commicsv1 */,
 				13B283852063F67B007BFC10 /* Products */,
@@ -129,6 +131,7 @@
 				13837A922073FCC40075C0B3 /* MainPageControllers */,
 				137BBA00206692AD0085F770 /* Models */,
 				13B283872063F67B007BFC10 /* AppDelegate.swift */,
+				1330A28320750DF7009EBE0C /* ios_license.dms */,
 				137BBA092066D02D0085F770 /* AllTypeListLayoutsViewController.swift */,
 				13B2838B2063F67B007BFC10 /* Main.storyboard */,
 				137BBA0B2066D58E0085F770 /* CellCollectionViewCell.swift */,
@@ -219,6 +222,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1330A28420750DF8009EBE0C /* ios_license.dms in Resources */,
 				13B283952063F67B007BFC10 /* LaunchScreen.storyboard in Resources */,
 				13B283922063F67B007BFC10 /* Assets.xcassets in Resources */,
 				1392054A206A98D60055F2EB /* Podfile in Resources */,
@@ -236,11 +240,15 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-commicsv1/Pods-commicsv1-frameworks.sh",
+				"${PODS_ROOT}/PhotoEditorSDK/pesdk-ios-build-8.3.0/PhotoEditorSDK.framework",
+				"${PODS_ROOT}/PhotoEditorSDK/pesdk-ios-build-8.3.0/PhotoEditorSDK.framework.dSYM",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PhotoEditorSDK.framework",
+				"${DWARF_DSYM_FOLDER_PATH}/PhotoEditorSDK.framework.dSYM",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 			);

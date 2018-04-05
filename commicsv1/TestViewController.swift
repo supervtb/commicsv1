@@ -12,27 +12,35 @@ import AVFoundation
 
 import Realm 
 
-
+import PhotoEditorSDK
 
 protocol SecondVCDelegate {
     func addNewPage()
     func addSelectedTemplate(identify: String)
     func removeCurrentPage()
     func addPhotoToDB(image : UIImage, tag: Int)
-    func removePhotoFromDb(pageNumber : Int, tagPhoto: Int)
+    func removePhotoFromDb(commicsIndex: Int ,pageNumber : Int, tagPhoto: Int)
     func getCountAllLoadedPages() -> Int
     func getCurrentPageIndex() -> Int
-    func saveChangesPan(pageNumber : Int, tagPhoto: Int, changeX: Double, changeY : Double )
-    func saveChangesRotationAngle(pageNumber : Int, tagPhoto: Int, rotationA: Double, rotationB: Double )
-    func saveChangesZoomValue(pageNumber : Int, tagPhoto: Int, zoomX: Double, zoomY: Double )
+    func saveChangesPan(commicsIndex: Int ,pageNumber : Int, tagPhoto: Int, changeX: Double, changeY : Double )
+    func saveChangesRotationAngle(commicsIndex: Int ,pageNumber : Int, tagPhoto: Int, rotationA: Double, rotationB: Double )
+    func saveChangesZoomValue(commicsIndex: Int ,pageNumber : Int, tagPhoto: Int, zoomX: Double, zoomY: Double )
+    func saveChangesPhoto(commicsIndex: Int, pageNumber: Int, tagPhoto: Int, data: Data)
     func getCurrentIdCommics() -> Int
    }
 
 
-class TestViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
+
+
+class TestViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, PhotoEditViewControllerDelegate{
+    
+    
    
     @IBOutlet var popUp: UIView!
    
+    var tappedImageTag = 0
+    
+    
     
     var changeX = 0.0
     var changeY = 0.0
@@ -44,8 +52,11 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     var pinchToZoomRecognizer = UIPinchGestureRecognizer()
     var rotationRecognizer = UIRotationGestureRecognizer()
     var moveRecognizer = UIPanGestureRecognizer()
+    var tapRecognizer = UITapGestureRecognizer()
     
     var delegate: SecondVCDelegate?
+    
+   
     
     var currentViewOnPage = UIView()
     
@@ -53,46 +64,52 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     var arrayOfPinchRecognizers = [UIPinchGestureRecognizer()]
     var arrayOfRotationRecognizers = [UIRotationGestureRecognizer()]
     var arrayOfMoveRecognizers = [UIPanGestureRecognizer()]
+    var arrayOfTapRecognizers = [UITapGestureRecognizer()]
     
     
-
+   
+    
+        
+   
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         generateRecognizers(amountOfRecognizers: self.view.subviews.count)
-        
+
         let countOfLoadedPages = delegate?.getCountAllLoadedPages()
-        
+
         let currentPageIndex = delegate?.getCurrentPageIndex()
-       
+
         if  countOfLoadedPages! > 1 {
-    
+
             let allViewsOnPage = view.subviews
             for viewOnPage in allViewsOnPage{
 
                 if viewOnPage.tag > 0  {
 
                     let currentImageObject = getLoadedImageObject(tag: viewOnPage.tag, pageNumber: currentPageIndex!)
-                   
+
 
                     let imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: currentPageIndex! )
                     if imageView != nil {
                         imageView?.frame=CGRect(x:0, y: 0, width: viewOnPage.bounds.width, height: viewOnPage.bounds.height)
-                        
+
                         if currentImageObject?.isChanged == true {
                             let radians = atan2((currentImageObject?.rotationB)!, (currentImageObject?.rotationA)!)
-                            
+
                             imageView?.transform = CGAffineTransform.identity.rotated(by: CGFloat(radians))
                                 .scaledBy(x: CGFloat((currentImageObject?.x)!), y: CGFloat((currentImageObject?.y)!))
-                          
+
                             if (currentImageObject?.changeX) != 0 && (currentImageObject?.changeY) != 0 {
                             imageView?.center = CGPoint(x: (currentImageObject?.changeX)!, y: (currentImageObject?.changeY)!)
-                           
+
                             }
-                           
+
                          }
                        viewOnPage.clipsToBounds = true
                         viewOnPage.addSubview(imageView!)
-                        
+
                         imageView?.isUserInteractionEnabled = true
 
                         imageView?.addGestureRecognizer(arrayOfMoveRecognizers.last!)
@@ -103,17 +120,23 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
                         arrayOfLongPressRecognizers.removeLast()
                         imageView?.addGestureRecognizer(arrayOfRotationRecognizers.last!)
                         arrayOfRotationRecognizers.removeLast()
+                        imageView?.addGestureRecognizer(arrayOfTapRecognizers.last!)
+                        arrayOfTapRecognizers.removeLast()
 
                     }
                 }
             }
-   
+
         }
 
 
         
       
     }
+    
+ 
+   
+ 
    
 
     override func didReceiveMemoryWarning() {
@@ -143,6 +166,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         image.view.tag = sender.tag
         
         self.present(image, animated: true, completion: nil)
+       
         
     }
     
@@ -157,6 +181,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             imageView.addGestureRecognizer(arrayOfPinchRecognizers.last!)
             imageView.addGestureRecognizer(arrayOfRotationRecognizers.last!)
             imageView.addGestureRecognizer(arrayOfMoveRecognizers.last!)
+                imageView.addGestureRecognizer(arrayOfTapRecognizers.last!)
            
             currentViewOnPage.clipsToBounds = true
             currentViewOnPage.addSubview(imageView)
@@ -164,13 +189,20 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             arrayOfPinchRecognizers.removeLast()
             arrayOfRotationRecognizers.removeLast()
             arrayOfMoveRecognizers.removeLast()
+                arrayOfTapRecognizers.removeLast()
+              
             
             delegate?.addPhotoToDB(image: image, tag: picker.view.tag)
+                
+             self.dismiss(animated: true, completion: nil)
+          
+               
            
                 }
-           self.dismiss(animated: true, completion: nil)
             
-           
+          
+            
+          
             
             }
     
@@ -194,10 +226,11 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         self.popUp.removeFromSuperview()
     }
     
-    @objc func handleTap(recognizer: UITapGestureRecognizer) {
+    @objc func handleTap(recognizer: UILongPressGestureRecognizer) {
         let myViews = recognizer.view as! UIImageView
-        let currentPageIndex = (delegate?.getCurrentPageIndex())! - 1
-        delegate?.removePhotoFromDb(pageNumber: currentPageIndex, tagPhoto: (myViews.superview?.tag)! )
+        let currentPageIndex = ((delegate?.getCurrentPageIndex())! - 1)
+        let currentCommicsId = delegate?.getCurrentIdCommics()
+        delegate?.removePhotoFromDb(commicsIndex: currentCommicsId!, pageNumber: currentPageIndex, tagPhoto: (myViews.superview?.tag)! )
         recognizer.view?.removeFromSuperview()
 
     }
@@ -206,7 +239,8 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
        recognizer.view?.transform = CGAffineTransform(scaleX: recognizer.scale, y: recognizer.scale)
         if recognizer.state == .ended{
             let currentPage = delegate?.getCurrentPageIndex()
-            delegate?.saveChangesZoomValue(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
+            let currentCommicsId = delegate?.getCurrentIdCommics()
+            delegate?.saveChangesZoomValue(commicsIndex: currentCommicsId!, pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
                                            zoomX: Double(recognizer.scale),
                                            zoomY: Double(recognizer.scale) )
         }
@@ -217,7 +251,8 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
        
         if recognizer.state == .ended {
             let currentPage = delegate?.getCurrentPageIndex()
-            delegate?.saveChangesRotationAngle(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
+            let currentCommicsId = delegate?.getCurrentIdCommics()
+            delegate?.saveChangesRotationAngle(commicsIndex: currentCommicsId!, pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
                                                rotationA: Double((recognizer.view?.transform.a)!),
                                                rotationB: Double((recognizer.view?.transform.b)!))
             
@@ -242,12 +277,50 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         if recognizer.state == .ended {
           
             let currentPage = delegate?.getCurrentPageIndex()
-            delegate?.saveChangesPan(pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
+            let currentCommicsId = delegate?.getCurrentIdCommics()
+            delegate?.saveChangesPan(commicsIndex: currentCommicsId!, pageNumber: currentPage!, tagPhoto: (recognizer.view?.superview?.tag)!,
                                   changeX: changeX, changeY: changeY )
             
             changeX = 0.0
             changeY = 0.0
         }
+    }
+    
+    @objc func tapForSelectPhotoEditor(recognizer: UITapGestureRecognizer){
+        if recognizer.state == .ended {
+            let currentCommics = delegate?.getCurrentIdCommics()
+             let currentPage = delegate?.getCurrentPageIndex()
+
+            let allcommics = realm.objects(Pages.self)
+            let currentcommics = allcommics[currentCommics!]
+            let currentpage = currentcommics.arrayPages[currentPage! - 1]
+
+
+
+            tappedImageTag = (recognizer.view?.superview?.tag)!
+
+            let indexImg  = currentpage.arrayImages.index(where: { (item) -> Bool in
+                item.tag == tappedImageTag
+            })
+
+            let data = currentpage.arrayImages[indexImg!].imageData
+            let photo = Photo(image:  UIImage(data: data!)! )
+
+            let photoEditViewController = PhotoEditViewController(photoAsset: photo)
+            photoEditViewController.delegate = self
+
+            present(photoEditViewController, animated: true, completion: nil)
+            
+            recognizer.view?.removeFromSuperview()
+            
+          
+            
+            
+            }
+        
+        
+        
+        
     }
     
     func generateRecognizers(amountOfRecognizers: Int){
@@ -261,10 +334,13 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             moveRecognizer = UIPanGestureRecognizer(target: self,
                                                     action:#selector(handlePan(recognizer:)))
             
+            tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(tapForSelectPhotoEditor(recognizer:)))
+            
             arrayOfLongPressRecognizers.append(longPressRecognizer)
             arrayOfPinchRecognizers.append(pinchToZoomRecognizer)
             arrayOfRotationRecognizers.append(rotationRecognizer)
             arrayOfMoveRecognizers.append(moveRecognizer)
+            arrayOfTapRecognizers.append(tapRecognizer)
             
         }
         
@@ -272,6 +348,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         pinchToZoomRecognizer.delegate = self as? UIGestureRecognizerDelegate
         rotationRecognizer.delegate = self as? UIGestureRecognizerDelegate
         moveRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        tapRecognizer.delegate = self as? UIGestureRecognizerDelegate
         
     }
     
@@ -305,6 +382,35 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
     }
     
+    func  getImageFromDBAfterEditing(tag: Int, pageNumber: Int)-> UIImageView? {
+        let indexCommics = delegate?.getCurrentIdCommics()
+        let commics = realm.objects(Pages.self)[indexCommics!]
+        
+        if pageNumber <= (commics.arrayPages.count) {
+            
+            
+            let pages = commics.arrayPages[pageNumber-1]
+            let indexImg  = pages.arrayImages.index(where: { (item) -> Bool in
+                item.tag == tag
+            })
+            if indexImg != nil {
+                let img = pages.arrayImages[indexImg!]
+                
+                let returned = UIImageView(image: UIImage(data: (img.imageData)!))
+                return returned
+            }
+            else{
+                return nil
+            }
+        }
+        else {
+            return nil
+        }
+        
+        
+    }
+    
+    
     func getLoadedImageObject(tag: Int, pageNumber: Int) -> Image? {
         let indexCommics = delegate?.getCurrentIdCommics()
         
@@ -331,14 +437,64 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         }
         
     }
+    
    
     
   
+    func photoEditViewController(_ photoEditViewController: PhotoEditViewController, didSave image: UIImage, and data: Data) {
+        let currentPage = delegate?.getCurrentPageIndex()
+        let currentCommicsId = delegate?.getCurrentIdCommics()
+        delegate?.saveChangesPhoto(commicsIndex: currentCommicsId!, pageNumber: currentPage!, tagPhoto: tappedImageTag, data: data)
+      
+       
+       
+        self.dismiss(animated: true, completion: {self.reloadViewAfterEditingPhoto()})
+       
+     
+        
+       
+    }
     
+    func photoEditViewControllerDidFailToGeneratePhoto(_ photoEditViewController: PhotoEditViewController) {
+        
+    }
     
+    func photoEditViewControllerDidCancel(_ photoEditViewController: PhotoEditViewController) {
+        self.dismiss(animated: true, completion: nil)
+    }
     
-   
-  
+    func reloadViewAfterEditingPhoto() {
+       
+        let currentPageIndex = delegate?.getCurrentPageIndex()
+        
+        
+        for view in  view.subviews{
+            if view.tag == tappedImageTag {
+               
+               
+                
+                let imageView = getImageFromDBAfterEditing(tag: view.tag, pageNumber: currentPageIndex!)
+                imageView?.frame=CGRect(x:0, y: 0, width: view.bounds.width, height: view.bounds.height)
+                imageView?.clipsToBounds = true
+                view.addSubview(imageView!)
+                imageView?.isUserInteractionEnabled = true
+               
+                imageView?.addGestureRecognizer(arrayOfMoveRecognizers.last!)
+                arrayOfMoveRecognizers.removeLast()
+                imageView?.addGestureRecognizer(arrayOfPinchRecognizers.last!)
+                arrayOfPinchRecognizers.removeLast()
+                imageView?.addGestureRecognizer(arrayOfLongPressRecognizers.last!)
+                arrayOfLongPressRecognizers.removeLast()
+                imageView?.addGestureRecognizer(arrayOfRotationRecognizers.last!)
+                arrayOfRotationRecognizers.removeLast()
+                imageView?.addGestureRecognizer(arrayOfTapRecognizers.last!)
+                arrayOfTapRecognizers.removeLast()
+               
+            }
+        }
+    }
+    
+ 
     
 }
 

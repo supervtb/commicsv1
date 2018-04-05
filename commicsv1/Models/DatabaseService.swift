@@ -13,10 +13,11 @@ import Foundation
     static func getAllNamesCommicsFromDB() -> [String]{
         var arrayOfNamesCommics = [String]()
         
-        let allObjectCommics = realm.objects(Pages.self)
+        var allObjectCommics = realm.objects(Pages.self)
         for objectCommics in allObjectCommics{
             arrayOfNamesCommics.append(String(objectCommics.nameCommics))
         }
+       
         return arrayOfNamesCommics
     }
     
@@ -47,57 +48,75 @@ import Foundation
        
     }
     
-    static func savePanPosition(pageNumber: Int, tagPhoto: Int,
+    static func savePanPosition(commicsIndex: Int ,pageNumber: Int, tagPhoto: Int,
                                 changeX: Double, changeY: Double ){
-        let commics = realm.objects(Pages.self).first
-        let pages = commics?.arrayPages[pageNumber-1]
-        let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
+        let commics = realm.objects(Pages.self)[commicsIndex]
+        let pages = commics.arrayPages[pageNumber-1]
+        let indexImg  = pages.arrayImages.index(where: { (item) -> Bool in
             item.tag == tagPhoto
         })
         if indexImg != nil {
-            let changedImage = commics?.arrayPages[pageNumber-1].arrayImages[indexImg!]
+            let changedImage = commics.arrayPages[pageNumber-1].arrayImages[indexImg!]
             try! realm.write {
-                changedImage?.changeX = changeX
-                changedImage?.changeY = changeY
-                changedImage?.isChanged = true
+                changedImage.changeX = changeX
+                changedImage.changeY = changeY
+                changedImage.isChanged = true
             }
             
         }
         
     }
 
-    static func saveChangesRotationAngle(pageNumber: Int, tagPhoto: Int,
+    static func saveChangesRotationAngle(commicsIndex: Int ,pageNumber: Int, tagPhoto: Int,
                                 rotationA: Double, rotationB: Double ){
-        let commics = realm.objects(Pages.self).first
-        let pages = commics?.arrayPages[pageNumber-1]
-        let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
+        let commics = realm.objects(Pages.self)[commicsIndex]
+        let pages = commics.arrayPages[pageNumber-1]
+        let indexImg  = pages.arrayImages.index(where: { (item) -> Bool in
             item.tag == tagPhoto
         })
         if indexImg != nil {
-            let changedImage = commics?.arrayPages[pageNumber-1].arrayImages[indexImg!]
+            let changedImage = commics.arrayPages[pageNumber-1].arrayImages[indexImg!]
             try! realm.write {
-                changedImage?.rotationA = rotationA
-                changedImage?.rotationB = rotationB
-                changedImage?.isChanged = true
+                changedImage.rotationA = rotationA
+                changedImage.rotationB = rotationB
+                changedImage.isChanged = true
             }
             
         }
         
     }
     
-    static func saveChangesZoomValue(pageNumber: Int, tagPhoto: Int,
+    static func saveChangesZoomValue(commicsIndex: Int ,pageNumber: Int, tagPhoto: Int,
                                          pinchX: Double, pinchY: Double ){
-        let commics = realm.objects(Pages.self).first
-        let pages = commics?.arrayPages[pageNumber-1]
-        let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
+        let commics = realm.objects(Pages.self)[commicsIndex]
+        let pages = commics.arrayPages[pageNumber-1]
+        let indexImg  = pages.arrayImages.index(where: { (item) -> Bool in
             item.tag == tagPhoto
         })
         if indexImg != nil {
-            let changedImage = commics?.arrayPages[pageNumber-1].arrayImages[indexImg!]
+            let changedImage = commics.arrayPages[pageNumber-1].arrayImages[indexImg!]
             try! realm.write {
-                changedImage?.x = pinchX
-                changedImage?.y = pinchY
-                changedImage?.isChanged = true
+                changedImage.x = pinchX
+                changedImage.y = pinchY
+                changedImage.isChanged = true
+            }
+            
+        }
+        
+    }
+    
+    static func saveChangesDataImage(commicsIndex: Int ,pageNumber: Int, tagPhoto: Int,
+                                     data: Data ){
+        let commics = realm.objects(Pages.self)[commicsIndex]
+        let pages = commics.arrayPages[pageNumber-1]
+        let indexImg  = pages.arrayImages.index(where: { (item) -> Bool in
+            item.tag == tagPhoto
+        })
+        if indexImg != nil {
+            let changedImage = commics.arrayPages[pageNumber-1].arrayImages[indexImg!]
+            try! realm.write {
+                changedImage.imageData = data
+                changedImage.isChanged = true
             }
             
         }

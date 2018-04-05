@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
    
     
@@ -59,7 +60,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var dest = segue.destination as! PageViewController
+        let dest = segue.destination as! PageViewController
         dest.indexLoadedCommics =  selectedIndexOfCommics
     }
     

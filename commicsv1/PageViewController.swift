@@ -54,6 +54,7 @@
                 }
             }
             }
+       
         
         func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
             guard let viewControllerIndex = pages.index(of: viewController) else { return nil }
@@ -158,18 +159,18 @@
         
         
         
-        func removePhotoFromDb(pageNumber: Int, tagPhoto: Int){
+        func removePhotoFromDb(commicsIndex: Int, pageNumber: Int, tagPhoto: Int){
          
-            let commics = realm.objects(Pages.self).first
-            let pages = commics?.arrayPages[pageNumber]
-            let indexImg  = pages?.arrayImages.index(where: { (item) -> Bool in
+            let commics = realm.objects(Pages.self)[commicsIndex]
+            let pages = commics.arrayPages[pageNumber]
+            let indexImg  = pages.arrayImages.index(where: { (item) -> Bool in
                 item.tag == tagPhoto
             })
             if indexImg != nil {
-                let removableImage = commics?.arrayPages[index-1].arrayImages[indexImg!]
+                let removableImage = commics.arrayPages[index-1].arrayImages[indexImg!]
             try! realm.write {
-                commics?.arrayPages[index - 1].arrayImages.remove(at: indexImg!)
-                realm.delete(removableImage!)
+                commics.arrayPages[index - 1].arrayImages.remove(at: indexImg!)
+                realm.delete(removableImage)
             }
 
             }
@@ -179,17 +180,21 @@
             
         }
         
-        func saveChangesPan(pageNumber: Int, tagPhoto: Int, changeX: Double, changeY: Double) {
-            DatabaseService.savePanPosition(pageNumber: pageNumber, tagPhoto: tagPhoto, changeX: changeX, changeY: changeY)
+        func saveChangesPan(commicsIndex: Int ,pageNumber: Int, tagPhoto: Int, changeX: Double, changeY: Double) {
+            DatabaseService.savePanPosition(commicsIndex: commicsIndex , pageNumber: pageNumber, tagPhoto: tagPhoto, changeX: changeX, changeY: changeY)
         }
         
-        func saveChangesRotationAngle(pageNumber: Int, tagPhoto: Int, rotationA: Double, rotationB: Double) {
-            DatabaseService.saveChangesRotationAngle(pageNumber: pageNumber, tagPhoto: tagPhoto, rotationA: rotationA, rotationB: rotationB)
+        func saveChangesRotationAngle(commicsIndex: Int, pageNumber: Int, tagPhoto: Int, rotationA: Double, rotationB: Double) {
+            DatabaseService.saveChangesRotationAngle(commicsIndex: commicsIndex, pageNumber: pageNumber, tagPhoto: tagPhoto, rotationA: rotationA, rotationB: rotationB)
             
         }
         
-        func saveChangesZoomValue(pageNumber: Int, tagPhoto: Int, zoomX: Double, zoomY: Double) {
-          DatabaseService.saveChangesZoomValue(pageNumber: pageNumber, tagPhoto: tagPhoto, pinchX: zoomX, pinchY: zoomY)
+        func saveChangesZoomValue(commicsIndex: Int ,pageNumber: Int, tagPhoto: Int, zoomX: Double, zoomY: Double) {
+            DatabaseService.saveChangesZoomValue(commicsIndex: commicsIndex, pageNumber: pageNumber, tagPhoto: tagPhoto, pinchX: zoomX, pinchY: zoomY)
+        }
+        
+        func saveChangesPhoto(commicsIndex: Int ,pageNumber: Int, tagPhoto: Int, data: Data){
+            DatabaseService.saveChangesDataImage(commicsIndex: commicsIndex, pageNumber: pageNumber, tagPhoto: tagPhoto, data: data)
         }
         
        
