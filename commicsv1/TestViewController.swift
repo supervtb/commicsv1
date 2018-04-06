@@ -133,16 +133,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
       
     }
-    
- 
-   
- 
-   
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-       
-    }
    
  
     @IBAction func addnewpage(_ sender: UIButton) {
@@ -309,9 +300,11 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let photoEditViewController = PhotoEditViewController(photoAsset: photo)
             photoEditViewController.delegate = self
 
-            present(photoEditViewController, animated: true, completion: nil)
+            present(photoEditViewController, animated: true, completion: {
+                recognizer.view?.removeFromSuperview()
+            })
             
-            recognizer.view?.removeFromSuperview()
+            
             
           
             
@@ -445,10 +438,10 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         let currentPage = delegate?.getCurrentPageIndex()
         let currentCommicsId = delegate?.getCurrentIdCommics()
         delegate?.saveChangesPhoto(commicsIndex: currentCommicsId!, pageNumber: currentPage!, tagPhoto: tappedImageTag, data: data)
-      
+        self.reloadViewAfterEditingPhoto()
        
        
-        self.dismiss(animated: true, completion: {self.reloadViewAfterEditingPhoto()})
+        self.dismiss(animated: true, completion: nil)
        
      
         
@@ -460,7 +453,9 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     }
     
     func photoEditViewControllerDidCancel(_ photoEditViewController: PhotoEditViewController) {
+         self.reloadViewAfterEditingPhoto()
         self.dismiss(animated: true, completion: nil)
+        
     }
     
     func reloadViewAfterEditingPhoto() {
