@@ -18,7 +18,7 @@ protocol SecondVCDelegate {
     func addNewPage()
     func addSelectedTemplate(identify: String)
     func removeCurrentPage()
-    func addPhotoToDB(image : UIImage, tag: Int)
+    func addPhotoToDB(commicsIndex: Int,image : UIImage, tag: Int)
     func removePhotoFromDb(commicsIndex: Int ,pageNumber : Int, tagPhoto: Int)
     func getCountAllLoadedPages() -> Int
     func getCurrentPageIndex() -> Int
@@ -32,7 +32,7 @@ protocol SecondVCDelegate {
 
 
 
-class TestViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, PhotoEditViewControllerDelegate{
+class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate, PhotoEditViewControllerDelegate{
     
     
    
@@ -60,22 +60,9 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     
     var currentViewOnPage = UIView()
     
-    var arrayOfLongPressRecognizers = [UILongPressGestureRecognizer()]
-    var arrayOfPinchRecognizers = [UIPinchGestureRecognizer()]
-    var arrayOfRotationRecognizers = [UIRotationGestureRecognizer()]
-    var arrayOfMoveRecognizers = [UIPanGestureRecognizer()]
-    var arrayOfTapRecognizers = [UITapGestureRecognizer()]
-    
-    
-   
-    
-        
-   
-    
-    
-    override func viewDidLoad() {
+     override func viewDidLoad() {
         super.viewDidLoad()
-        generateRecognizers(amountOfRecognizers: self.view.subviews.count)
+       
 
         let countOfLoadedPages = delegate?.getCountAllLoadedPages()
 
@@ -91,7 +78,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
                     let currentImageObject = getLoadedImageObject(tag: viewOnPage.tag, pageNumber: currentPageIndex!)
 
 
-                    let imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: currentPageIndex! )
+                    var imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: currentPageIndex! )
                     if imageView != nil {
                         imageView?.frame=CGRect(x:0, y: 0, width: viewOnPage.bounds.width, height: viewOnPage.bounds.height)
 
@@ -108,20 +95,11 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
 
                          }
                        viewOnPage.clipsToBounds = true
+                        imageView = addRecognnizers(imageView: imageView!)
                         viewOnPage.addSubview(imageView!)
 
                         imageView?.isUserInteractionEnabled = true
 
-                        imageView?.addGestureRecognizer(arrayOfMoveRecognizers.last!)
-                        arrayOfMoveRecognizers.removeLast()
-                        imageView?.addGestureRecognizer(arrayOfPinchRecognizers.last!)
-                        arrayOfPinchRecognizers.removeLast()
-                        imageView?.addGestureRecognizer(arrayOfLongPressRecognizers.last!)
-                        arrayOfLongPressRecognizers.removeLast()
-                        imageView?.addGestureRecognizer(arrayOfRotationRecognizers.last!)
-                        arrayOfRotationRecognizers.removeLast()
-                        imageView?.addGestureRecognizer(arrayOfTapRecognizers.last!)
-                        arrayOfTapRecognizers.removeLast()
 
                     }
                 }
@@ -168,22 +146,19 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             let imageView = UIImageView(image: image)
             imageView.frame = CGRect(x: 0, y: 0, width: currentViewOnPage.bounds.width, height: currentViewOnPage.bounds.height)
             imageView.isUserInteractionEnabled = true
-            imageView.addGestureRecognizer(arrayOfLongPressRecognizers.last!)
-            imageView.addGestureRecognizer(arrayOfPinchRecognizers.last!)
-            imageView.addGestureRecognizer(arrayOfRotationRecognizers.last!)
-            imageView.addGestureRecognizer(arrayOfMoveRecognizers.last!)
-                imageView.addGestureRecognizer(arrayOfTapRecognizers.last!)
+
+                
+                let imageViewWithRecognizer = addRecognnizers(imageView: imageView)
+                
+                
            
             currentViewOnPage.clipsToBounds = true
-            currentViewOnPage.addSubview(imageView)
-            arrayOfLongPressRecognizers.removeLast()
-            arrayOfPinchRecognizers.removeLast()
-            arrayOfRotationRecognizers.removeLast()
-            arrayOfMoveRecognizers.removeLast()
-                arrayOfTapRecognizers.removeLast()
+            currentViewOnPage.addSubview(imageViewWithRecognizer)
+
               
+                 let commicsIndex = delegate?.getCurrentIdCommics()
             
-            delegate?.addPhotoToDB(image: image, tag: picker.view.tag)
+                delegate?.addPhotoToDB(commicsIndex: commicsIndex! ,image: image, tag: picker.view.tag)
                 
              self.dismiss(animated: true, completion: nil)
           
@@ -295,6 +270,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
             })
 
             let data = currentpage.arrayImages[indexImg!].imageData
+            
             let photo = Photo(image:  UIImage(data: data!)! )
 
             let photoEditViewController = PhotoEditViewController(photoAsset: photo)
@@ -316,34 +292,7 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
         
     }
     
-    func generateRecognizers(amountOfRecognizers: Int){
-        for _ in 0..<amountOfRecognizers {
-            longPressRecognizer = UILongPressGestureRecognizer(target: self,
-                                                         action:#selector(handleTap(recognizer:)))
-            pinchToZoomRecognizer = UIPinchGestureRecognizer(target: self,
-                                                             action:#selector(handlePinch(recognizer:)))
-            rotationRecognizer = UIRotationGestureRecognizer(target: self,
-                                                             action:#selector(handleRotate(recognizer:)))
-            moveRecognizer = UIPanGestureRecognizer(target: self,
-                                                    action:#selector(handlePan(recognizer:)))
-            
-            tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(tapForSelectPhotoEditor(recognizer:)))
-            
-            arrayOfLongPressRecognizers.append(longPressRecognizer)
-            arrayOfPinchRecognizers.append(pinchToZoomRecognizer)
-            arrayOfRotationRecognizers.append(rotationRecognizer)
-            arrayOfMoveRecognizers.append(moveRecognizer)
-            arrayOfTapRecognizers.append(tapRecognizer)
-            
-        }
-        
-        longPressRecognizer.delegate = self as? UIGestureRecognizerDelegate
-        pinchToZoomRecognizer.delegate = self as? UIGestureRecognizerDelegate
-        rotationRecognizer.delegate = self as? UIGestureRecognizerDelegate
-        moveRecognizer.delegate = self as? UIGestureRecognizerDelegate
-        tapRecognizer.delegate = self as? UIGestureRecognizerDelegate
-        
-    }
+
     
    
     
@@ -437,12 +386,18 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
     func photoEditViewController(_ photoEditViewController: PhotoEditViewController, didSave image: UIImage, and data: Data) {
         let currentPage = delegate?.getCurrentPageIndex()
         let currentCommicsId = delegate?.getCurrentIdCommics()
+        if data.count != 0 {
         delegate?.saveChangesPhoto(commicsIndex: currentCommicsId!, pageNumber: currentPage!, tagPhoto: tappedImageTag, data: data)
         self.reloadViewAfterEditingPhoto()
        
        
         self.dismiss(animated: true, completion: nil)
-       
+        } else {
+            self.reloadViewAfterEditingPhoto()
+            
+            
+            self.dismiss(animated: true, completion: nil)
+        }
      
         
        
@@ -468,25 +423,49 @@ class TestViewController: UIViewController, UINavigationControllerDelegate, UIIm
                
                
                 
-                let imageView = getImageFromDBAfterEditing(tag: view.tag, pageNumber: currentPageIndex!)
+                var imageView = getImageFromDBAfterEditing(tag: view.tag, pageNumber: currentPageIndex!)
                 imageView?.frame=CGRect(x:0, y: 0, width: view.bounds.width, height: view.bounds.height)
                 imageView?.clipsToBounds = true
+                imageView = addRecognnizers(imageView: imageView!)
+                
+                
                 view.addSubview(imageView!)
                 imageView?.isUserInteractionEnabled = true
                
-                imageView?.addGestureRecognizer(arrayOfMoveRecognizers.last!)
-                arrayOfMoveRecognizers.removeLast()
-                imageView?.addGestureRecognizer(arrayOfPinchRecognizers.last!)
-                arrayOfPinchRecognizers.removeLast()
-                imageView?.addGestureRecognizer(arrayOfLongPressRecognizers.last!)
-                arrayOfLongPressRecognizers.removeLast()
-                imageView?.addGestureRecognizer(arrayOfRotationRecognizers.last!)
-                arrayOfRotationRecognizers.removeLast()
-                imageView?.addGestureRecognizer(arrayOfTapRecognizers.last!)
-                arrayOfTapRecognizers.removeLast()
+                
                
             }
         }
+    }
+    
+    func addRecognnizers(imageView: UIImageView) -> UIImageView{
+        longPressRecognizer = UILongPressGestureRecognizer(target: self,
+                                                           action:#selector(handleTap(recognizer:)))
+        pinchToZoomRecognizer = UIPinchGestureRecognizer(target: self,
+                                                         action:#selector(handlePinch(recognizer:)))
+        rotationRecognizer = UIRotationGestureRecognizer(target: self,
+                                                         action:#selector(handleRotate(recognizer:)))
+        moveRecognizer = UIPanGestureRecognizer(target: self,
+                                                action:#selector(handlePan(recognizer:)))
+        
+        tapRecognizer = UITapGestureRecognizer(target: self, action:#selector(tapForSelectPhotoEditor(recognizer:)))
+        
+        longPressRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        pinchToZoomRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        rotationRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        moveRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        tapRecognizer.delegate = self as? UIGestureRecognizerDelegate
+        
+        
+        imageView.addGestureRecognizer(longPressRecognizer)
+        imageView.addGestureRecognizer(pinchToZoomRecognizer)
+        imageView.addGestureRecognizer(rotationRecognizer)
+        imageView.addGestureRecognizer(moveRecognizer)
+        imageView.addGestureRecognizer(tapRecognizer)
+        
+        
+        
+        return imageView
     }
     
  

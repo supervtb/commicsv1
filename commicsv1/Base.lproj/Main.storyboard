@@ -35,10 +35,10 @@
             </objects>
             <point key="canvasLocation" x="-858.39999999999998" y="115.59220389805098"/>
         </scene>
-        <!--View Controller-->
+        <!--All Commics CollectionVC-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="AllCommicsCollectionVC" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -192,10 +192,10 @@
             </objects>
             <point key="canvasLocation" x="1472.8" y="-324.28785607196403"/>
         </scene>
-        <!--Test View Controller-->
+        <!--LayoutVC-->
         <scene sceneID="NTD-UX-oCJ">
             <objects>
-                <viewController storyboardIdentifier="one" id="DdA-Hy-FIV" customClass="TestViewController" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="one" id="DdA-Hy-FIV" customClass="LayoutVC" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="rex-Zf-aAs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -218,7 +218,7 @@
                                     <action selector="removeCurrentPage:" destination="DdA-Hy-FIV" eventType="touchUpInside" id="dGv-Wf-PwP"/>
                                 </connections>
                             </button>
-                            <view tag="3" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="stL-fj-QMg">
+                            <view tag="3" contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="stL-fj-QMg">
                                 <rect key="frame" x="136" y="199" width="223" height="410"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -286,10 +286,10 @@
             </objects>
             <point key="canvasLocation" x="2116" y="-324.28785607196403"/>
         </scene>
-        <!--Test View Controller-->
+        <!--LayoutVC-->
         <scene sceneID="a6h-K9-ZGv">
             <objects>
-                <viewController storyboardIdentifier="two" id="b9Y-al-RmR" customClass="TestViewController" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="two" id="b9Y-al-RmR" customClass="LayoutVC" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="FE7-UL-aoY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -351,10 +351,10 @@
             </objects>
             <point key="canvasLocation" x="2766" y="-324"/>
         </scene>
-        <!--Test View Controller-->
+        <!--LayoutVC-->
         <scene sceneID="lJ2-oa-xBw">
             <objects>
-                <viewController storyboardIdentifier="three" id="6P2-3n-cLx" customClass="TestViewController" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="three" id="6P2-3n-cLx" customClass="LayoutVC" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HPw-tU-p4J">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -431,10 +431,10 @@
             </objects>
             <point key="canvasLocation" x="3418" y="-324"/>
         </scene>
-        <!--Test View Controller-->
+        <!--LayoutVC-->
         <scene sceneID="bKr-qK-t1j">
             <objects>
-                <viewController storyboardIdentifier="four" id="zJl-Fx-NZa" customClass="TestViewController" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="four" id="zJl-Fx-NZa" customClass="LayoutVC" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HML-p0-rQ1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -541,10 +541,10 @@
             </objects>
             <point key="canvasLocation" x="4077.5999999999999" y="-324.28785607196403"/>
         </scene>
-        <!--Test View Controller-->
+        <!--LayoutVC-->
         <scene sceneID="5mE-0n-q8F">
             <objects>
-                <viewController storyboardIdentifier="five" id="Nxx-X9-s0e" customClass="TestViewController" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="five" id="Nxx-X9-s0e" customClass="LayoutVC" customModule="commicsv1" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qVM-m2-83G">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

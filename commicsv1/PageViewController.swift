@@ -47,7 +47,7 @@
             
             if pages.count < 2 && commics.arrayPages.count > 0 {
                 for pageFromCommics in commics.arrayPages{
-                    if let vc = sb.instantiateViewController(withIdentifier: pageFromCommics.name) as? TestViewController {
+                    if let vc = sb.instantiateViewController(withIdentifier: pageFromCommics.name) as? LayoutVC {
                                         vc.delegate = self
                                         self.pages.append(vc)
                                         }
@@ -109,7 +109,7 @@
         
         func addSelectedTemplate(identify: String){
             let sb = UIStoryboard(name: "Main", bundle: nil)
-            if let vc1 = sb.instantiateViewController(withIdentifier: identify) as? TestViewController{
+            if let vc1 = sb.instantiateViewController(withIdentifier: identify) as? LayoutVC{
                 vc1.delegate = self
                 self.pages.append(vc1)
                 setViewControllers([vc1], direction: .forward, animated: true, completion: nil)
@@ -144,7 +144,8 @@
             
         }
         
-        func addPhotoToDB(image: UIImage, tag: Int) {
+        func addPhotoToDB(commicsIndex: Int,image: UIImage, tag: Int) {
+             let commics = realm.objects(Pages.self)[commicsIndex]
             let newImage = Image()
            newImage.imageData = UIImageJPEGRepresentation(image, 0)! as Data
             newImage.tag = tag
@@ -167,9 +168,9 @@
                 item.tag == tagPhoto
             })
             if indexImg != nil {
-                let removableImage = commics.arrayPages[index-1].arrayImages[indexImg!]
+                let removableImage = commics.arrayPages[pageNumber].arrayImages[indexImg!]
             try! realm.write {
-                commics.arrayPages[index - 1].arrayImages.remove(at: indexImg!)
+                commics.arrayPages[pageNumber].arrayImages.remove(at: indexImg!)
                 realm.delete(removableImage)
             }
 

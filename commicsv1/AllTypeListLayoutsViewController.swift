@@ -29,6 +29,7 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
             namesView.append(name.nameLayout)
             namesIconView.append(name.nameIconLayout)
         }
+       
         
         collection.delegate = self
         collection.dataSource = self
@@ -66,7 +67,7 @@ class AllTypeListLayoutsViewController: UIViewController, UICollectionViewDelega
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        var dest = segue.destination as! ViewController
+        var dest = segue.destination as! AllCommicsCollectionVC
        
     }
     
