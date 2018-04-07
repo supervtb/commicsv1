@@ -9,9 +9,13 @@
 import UIKit
 import RealmSwift
 
+
+
 class AllCommicsCollectionVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-   
+ 
     
+   
+    var isReadOnlyMode = false
     
     var selectedIndexOfCommics = 0
     
@@ -46,34 +50,38 @@ class AllCommicsCollectionVC: UIViewController, UICollectionViewDelegate, UIColl
         let allCommicsNames = DatabaseService.getAllNamesCommicsFromDB()
        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         cell.selectCommics.accessibilityIdentifier = allCommicsNames[indexPath.item]
-        cell.selectCommics.setTitle(allCommicsNames[indexPath.item], for: .normal  )
+        cell.selectCommics.setTitle(String(indexPath.item), for: .normal  )
+      
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedIndexOfCommics = indexPath.item
+    
+          
+//        self.performSegue(withIdentifier: "toSelectedCommics", sender: self)
         
-       self.performSegue(withIdentifier: "toSelectedCommics", sender: self)
+          selectedIndexOfCommics = indexPath.item
+          self.performSegue(withIdentifier: "toSelectingMode", sender:self)
         
     }
     
    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let dest = segue.destination as! PageViewController
-        dest.indexLoadedCommics =  selectedIndexOfCommics
+        let dest = segue.destination as! SelectingOpenModeVC
+       dest.selectingCommics = selectedIndexOfCommics
     }
     
     
    
     
     @IBAction func createNewCommicsBttn(_ sender: UIButton) {
-        print("create")
+       
         DatabaseService.createNewCommics(nameCommics: "Create")
         collection.reloadData()
     }
     
-   
+    
    
 }
-

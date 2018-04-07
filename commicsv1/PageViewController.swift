@@ -25,14 +25,14 @@
             super.viewDidLoad()
             self.dataSource = self
             
-            if realm.objects(Pages.self)[indexLoadedCommics] != nil {
+             realm.objects(Pages.self)[indexLoadedCommics] 
                 commics = realm.objects(Pages.self)[indexLoadedCommics]
-            }
-            else {
-                DatabaseService.createNewCommics(nameCommics: "bla")
-                commics = realm.objects(Pages.self).last!
-                
-            }
+            
+//            else {
+//                DatabaseService.createNewCommics(nameCommics: "first")
+//                commics = realm.objects(Pages.self).last!
+//
+//            }
             
             let sb = UIStoryboard(name: "Main", bundle:nil)
                 if let vc0 = sb.instantiateViewController(withIdentifier: "all") as? AllTypeListLayoutsViewController {
