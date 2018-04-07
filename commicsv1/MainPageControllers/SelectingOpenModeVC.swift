@@ -31,12 +31,14 @@ class SelectingOpenModeVC: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toShow" {
-            let destination = segue.destination as! ShowCommicsVC
-            destination.selectedComics = selectingCommics
+            let destination = segue.destination as! PageViewController
+            destination.indexLoadedCommics = selectingCommics
+            destination.commicsOpenMode = true
         }
         else {
             let destination = segue.destination as! PageViewController
             destination.indexLoadedCommics = selectingCommics
+            destination.commicsOpenMode = false
         }
         
        

@@ -20,21 +20,21 @@
         
         var indexLoadedCommics = -1
         
+        var commicsOpenMode = false
+        
         var pages = [UIViewController]()
         override func viewDidLoad() {
             super.viewDidLoad()
             self.dataSource = self
+     
             
-             realm.objects(Pages.self)[indexLoadedCommics] 
                 commics = realm.objects(Pages.self)[indexLoadedCommics]
             
-//            else {
-//                DatabaseService.createNewCommics(nameCommics: "first")
-//                commics = realm.objects(Pages.self).last!
-//
-//            }
+
             
             let sb = UIStoryboard(name: "Main", bundle:nil)
+            
+           
                 if let vc0 = sb.instantiateViewController(withIdentifier: "all") as? AllTypeListLayoutsViewController {
                    vc0.delegate = self
                     self.pages.append(vc0)
@@ -52,45 +52,34 @@
                                         self.pages.append(vc)
                                         }
                 }
+                
+                if commicsOpenMode{
+                    pages.removeFirst()
+                    if let firstViewController = pages.first{
+                        self.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
+                    }
+                    
+                  
+                }
             }
-            }
+             }
        
         
         func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
             guard let viewControllerIndex = pages.index(of: viewController) else { return nil }
-            
             let previousIndex = viewControllerIndex - 1
             guard previousIndex >= 0          else { return nil}
-            
             guard pages.count > previousIndex else { return nil }
-            
-          
-              index = viewControllerIndex
-            
-           
-          
-            
-            
-            
-           
+            index = viewControllerIndex
             return pages[previousIndex]
         }
         
         func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
             guard let viewControllerIndex = pages.index(of: viewController) else { return nil }
-            
             let nextIndex = viewControllerIndex + 1
-            
-           
-            
             index = viewControllerIndex
-            
             guard nextIndex < pages.count else { return nil }
-            
             guard pages.count > nextIndex else { return nil }
-            
-            
-          
             return pages[nextIndex]
         }
         
@@ -215,6 +204,10 @@
         
         func getCurrentIdCommics() -> Int {
          return indexLoadedCommics
+        }
+        
+        func isOpenMode() -> Bool{
+            return commicsOpenMode
         }
         
       

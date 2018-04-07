@@ -27,6 +27,7 @@ protocol SecondVCDelegate {
     func saveChangesZoomValue(commicsIndex: Int ,pageNumber : Int, tagPhoto: Int, zoomX: Double, zoomY: Double )
     func saveChangesPhoto(commicsIndex: Int, pageNumber: Int, tagPhoto: Int, data: Data)
     func getCurrentIdCommics() -> Int
+    func isOpenMode() -> Bool
    }
 
 
@@ -67,9 +68,17 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
         let countOfLoadedPages = delegate?.getCountAllLoadedPages()
 
         let currentPageIndex = delegate?.getCurrentPageIndex()
-
+        
+        let commicsOpenMode = delegate?.isOpenMode()
+        
+        
+        
+        if !commicsOpenMode! {
+        
         if  countOfLoadedPages! > 1 {
 
+            
+            
             let allViewsOnPage = view.subviews
             for viewOnPage in allViewsOnPage{
 
@@ -103,13 +112,69 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
 
                     }
                 }
-            }
+            
 
+           }
+
+            }
+            
+        } else {
+          
+            
+           
+            if  countOfLoadedPages! > 0 {
+                
+                let allViewsOnPage = view.subviews
+                for viewOnPage in allViewsOnPage{
+                    
+                    if viewOnPage.tag > 0  {
+                        
+                        let currentImageObject = getLoadedImageObject(tag: viewOnPage.tag, pageNumber: currentPageIndex!)
+                        
+                        
+                        var imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: currentPageIndex! )
+                        if imageView != nil {
+                            imageView?.frame=CGRect(x:0, y: 0, width: viewOnPage.bounds.width, height: viewOnPage.bounds.height)
+                            
+                            if currentImageObject?.isChanged == true {
+                                let radians = atan2((currentImageObject?.rotationB)!, (currentImageObject?.rotationA)!)
+                                
+                                imageView?.transform = CGAffineTransform.identity.rotated(by: CGFloat(radians))
+                                    .scaledBy(x: CGFloat((currentImageObject?.x)!), y: CGFloat((currentImageObject?.y)!))
+                                
+                                if (currentImageObject?.changeX) != 0 && (currentImageObject?.changeY) != 0 {
+                                    imageView?.center = CGPoint(x: (currentImageObject?.changeX)!, y: (currentImageObject?.changeY)!)
+                                    
+                                }
+                                
+                            }
+                            viewOnPage.clipsToBounds = true
+                           
+                            viewOnPage.addSubview(imageView!)
+                            viewOnPage.isUserInteractionEnabled = false
+                            imageView?.isUserInteractionEnabled = false
+                           
+                            
+                        }
+                       
+                    }
+                    if viewOnPage.isKind(of: UIButton.self) {
+                        viewOnPage.isHidden = true
+                    }
+                    if viewOnPage.tag == 100{
+                        viewOnPage.isHidden = true
+                    }
+                    
+                   
+                    
+                }
+                
+            }
+            
+            
+            
         }
 
-
-        
-      
     }
 
    

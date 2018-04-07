@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		13276B662064388D0092131C /* LayoutFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13276B652064388D0092131C /* LayoutFirstViewController.swift */; };
 		1330A28420750DF8009EBE0C /* ios_license.dms in Resources */ = {isa = PBXBuildFile; fileRef = 1330A28320750DF7009EBE0C /* ios_license.dms */; };
+		1368BA182078F8FB00FD8868 /* ShowPagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1368BA172078F8FB00FD8868 /* ShowPagesVC.swift */; };
 		1377D3F12067F39E0079A7FF /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1377D3F02067F39E0079A7FF /* AudioToolbox.framework */; };
 		137BBA02206692DE0085F770 /* TypeOfLayouts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA01206692DE0085F770 /* TypeOfLayouts.swift */; };
 		137BBA0A2066D02D0085F770 /* AllTypeListLayoutsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137BBA092066D02D0085F770 /* AllTypeListLayoutsViewController.swift */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		13276B652064388D0092131C /* LayoutFirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutFirstViewController.swift; sourceTree = "<group>"; };
 		1330A28320750DF7009EBE0C /* ios_license.dms */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ios_license.dms; sourceTree = "<group>"; };
+		1368BA172078F8FB00FD8868 /* ShowPagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowPagesVC.swift; sourceTree = "<group>"; };
 		1377D3F02067F39E0079A7FF /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		1377D3F22067F39E0079A7FF /* commicsv1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = commicsv1.entitlements; sourceTree = "<group>"; };
 		137BBA01206692DE0085F770 /* TypeOfLayouts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeOfLayouts.swift; sourceTree = "<group>"; };
@@ -76,6 +78,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1368BA162078F8A500FD8868 /* ShowMode */ = {
+			isa = PBXGroup;
+			children = (
+				1368BA172078F8FB00FD8868 /* ShowPagesVC.swift */,
+			);
+			path = ShowMode;
+			sourceTree = "<group>";
+		};
 		1377D3EF2067F39E0079A7FF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				1377D3F22067F39E0079A7FF /* commicsv1.entitlements */,
+				1368BA162078F8A500FD8868 /* ShowMode */,
 				13837A922073FCC40075C0B3 /* MainPageControllers */,
 				137BBA00206692AD0085F770 /* Models */,
 				13B283872063F67B007BFC10 /* AppDelegate.swift */,
@@ -188,7 +199,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Альберт Чубаков";
 				TargetAttributes = {
 					13B283832063F67B007BFC10 = {
@@ -315,6 +326,7 @@
 				13B283902063F67B007BFC10 /* commicsv1.xcdatamodeld in Sources */,
 				13E46A09206524A00096916A /* LayoutVC.swift in Sources */,
 				13CD167D2078C9D700B4E796 /* ShowCommicsVC.swift in Sources */,
+				1368BA182078F8FB00FD8868 /* ShowPagesVC.swift in Sources */,
 				13B2839D2063F8EA007BFC10 /* PageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,6 +367,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -362,6 +375,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -412,6 +426,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -419,6 +434,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
