@@ -130,7 +130,7 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
                     if viewOnPage.tag > 0  {
                         for child in viewOnPage.subviews{
 
-                            if let item = child as? UIButton{
+                            if child is UIButton{
                                child.isHidden = true
                             }
                             
