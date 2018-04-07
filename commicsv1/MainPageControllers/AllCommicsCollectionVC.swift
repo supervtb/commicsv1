@@ -59,7 +59,7 @@ class AllCommicsCollectionVC: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
           
-//        self.performSegue(withIdentifier: "toSelectedCommics", sender: self)
+
         
           selectedIndexOfCommics = indexPath.item
           self.performSegue(withIdentifier: "toSelectingMode", sender:self)
