@@ -26,7 +26,7 @@
         override func viewDidLoad() {
             super.viewDidLoad()
             self.dataSource = self
-     
+            
             
                 commics = realm.objects(Pages.self)[indexLoadedCommics]
             
@@ -34,13 +34,14 @@
             
             let sb = UIStoryboard(name: "Main", bundle:nil)
             
-           
+            
                 if let vc0 = sb.instantiateViewController(withIdentifier: "all") as? AllTypeListLayoutsViewController {
                    vc0.delegate = self
                     self.pages.append(vc0)
                     
-                    
+                 
                 }
+            
                 if let firstViewController = pages.first{
                self.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
                }
@@ -53,14 +54,7 @@
                                         }
                 }
                 
-                if commicsOpenMode{
-                    pages.removeFirst()
-                    if let firstViewController = pages.first{
-                        self.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
-                    }
-                    
-                  
-                }
+                
             }
              }
        
@@ -85,7 +79,7 @@
         
         func redirectToLayoutPage(){
             if let firstViewController = pages.first{
-                self.setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
+                self.setViewControllers([firstViewController], direction: .reverse, animated: true, completion: nil)
             }
         }
         
