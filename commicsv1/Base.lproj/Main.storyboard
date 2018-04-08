@@ -233,7 +233,7 @@
                                     <action selector="removeCurrentPage:" destination="DdA-Hy-FIV" eventType="touchUpInside" id="dGv-Wf-PwP"/>
                                 </connections>
                             </button>
-                            <view tag="3" contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="stL-fj-QMg">
+                            <view tag="3" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="stL-fj-QMg">
                                 <rect key="frame" x="194" y="199" width="165" height="410"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -692,6 +692,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="VbG-OH-ikB"/>
-        <segue reference="aIs-zv-i0v"/>
+        <segue reference="noh-cY-u2C"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -89,7 +89,25 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
 
                     var imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: currentPageIndex! )
                     if imageView != nil {
-                        imageView?.frame=CGRect(x:0, y: 0, width: viewOnPage.bounds.width, height: viewOnPage.bounds.height)
+                        
+                     
+                        
+                        
+                        imageView?.frame=CGRect(x:0, y: 0, width: (imageView?.bounds.width)!, height: (imageView?.bounds.height)!)
+                       
+                        
+
+                        let ratio = (imageView?.bounds.width)! / (imageView?.bounds.height)!
+                        if (viewOnPage.bounds.width) > (viewOnPage.bounds.height) {
+                            let newHeight = (viewOnPage.frame.width) / ratio
+                            imageView?.frame.size = CGSize(width: (viewOnPage.frame.width), height: newHeight)
+                        }
+                        else{
+                            let newWidth = (viewOnPage.frame.height) * ratio
+                            imageView?.frame.size = CGSize(width: newWidth, height: (viewOnPage.frame.height))
+                        }
+                        
+                        
 
                         if currentImageObject?.isChanged == true {
                             let radians = atan2((currentImageObject?.rotationB)!, (currentImageObject?.rotationA)!)
@@ -105,9 +123,9 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
                          }
                        viewOnPage.clipsToBounds = true
                         imageView = addRecognnizers(imageView: imageView!)
+                        imageView?.isUserInteractionEnabled = true
                         viewOnPage.addSubview(imageView!)
 
-                        imageView?.isUserInteractionEnabled = true
 
 
                     }
@@ -141,7 +159,21 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
 
                         let imageView = getImageFromDB(tag: viewOnPage.tag, pageNumber: currentPageIndex! )
                         if imageView != nil {
-                            imageView?.frame=CGRect(x:0, y: 0, width: viewOnPage.bounds.width, height: viewOnPage.bounds.height)
+                            
+                            
+                            imageView?.frame=CGRect(x:0, y: 0, width: (imageView?.bounds.width)!, height: (imageView?.bounds.height)!)
+                            
+                            
+                            let ratio = (imageView?.bounds.width)! / (imageView?.bounds.height)!
+                            if (viewOnPage.bounds.width) > (viewOnPage.bounds.height) {
+                                let newHeight = (viewOnPage.frame.width) / ratio
+                                imageView?.frame.size = CGSize(width: (viewOnPage.frame.width), height: newHeight)
+                            }
+                            else{
+                                let newWidth = (viewOnPage.frame.height) * ratio
+                                imageView?.frame.size = CGSize(width: newWidth, height: (viewOnPage.frame.height))
+                            }
+                            
 
                             if currentImageObject?.isChanged == true {
                                 let radians = atan2((currentImageObject?.rotationB)!, (currentImageObject?.rotationA)!)
@@ -156,10 +188,10 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
 
                             }
                             viewOnPage.clipsToBounds = true
-
-                            viewOnPage.addSubview(imageView!)
-                            viewOnPage.isUserInteractionEnabled = false
                             imageView?.isUserInteractionEnabled = false
+                            viewOnPage.addSubview(imageView!)
+                        
+                           
 
 
                         }
@@ -214,12 +246,32 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
     
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
             if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            let imageView = UIImageView(image: image)
-            imageView.frame = CGRect(x: 0, y: 0, width: currentViewOnPage.bounds.width, height: currentViewOnPage.bounds.height)
+                
+                 let imageView = UIImageView(image: image)
+                let ratio = image.size.width / image.size.height
+                if currentViewOnPage.bounds.width > currentViewOnPage.bounds.height {
+                    let newHeight = currentViewOnPage.frame.width / ratio
+                    imageView.frame.size = CGSize(width: currentViewOnPage.frame.width, height: newHeight)
+                }
+                else{
+                    let newWidth = currentViewOnPage.frame.height * ratio
+                    imageView.frame.size = CGSize(width: newWidth, height: currentViewOnPage.frame.height)
+                }
+                
+                
+                
+           
+                
+          //  imageView.frame = CGRect(x: 0, y: 0, width: currentViewOnPage.bounds.width, height: currentViewOnPage.bounds.height)
             imageView.isUserInteractionEnabled = true
 
                 
                 let imageViewWithRecognizer = addRecognnizers(imageView: imageView)
+                
+               
+                
+                
+                
                 
                 
            
@@ -495,9 +547,20 @@ class LayoutVC: UIViewController, UINavigationControllerDelegate, UIImagePickerC
                
                 
                 var imageView = getImageFromDBAfterEditing(tag: view.tag, pageNumber: currentPageIndex!)
-                imageView?.frame=CGRect(x:0, y: 0, width: view.bounds.width, height: view.bounds.height)
+                imageView?.frame=CGRect(x:0, y: 0, width: (imageView?.bounds.width)!, height: (imageView?.bounds.height)!)
                 imageView?.clipsToBounds = true
                 imageView = addRecognnizers(imageView: imageView!)
+                
+                
+                let ratio = (imageView?.bounds.width)! / (imageView?.bounds.height)!
+                if (view.bounds.width) > (view.bounds.height) {
+                    let newHeight = (view.frame.width) / ratio
+                    imageView?.frame.size = CGSize(width: (view.frame.width), height: newHeight)
+                }
+                else{
+                    let newWidth = (view.frame.height) * ratio
+                    imageView?.frame.size = CGSize(width: newWidth, height: (view.frame.height))
+                }
                 
                 
                 view.addSubview(imageView!)
